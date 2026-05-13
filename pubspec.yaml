@@ -1,0 +1,90 @@
+name: cafe
+description: "Café Management System - POS & Business Management"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State Management
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.5
+
+  # Database
+  sqflite: ^2.3.3+1
+  sqflite_common_ffi: ^2.3.3
+
+  # DI
+  get_it: ^7.7.0
+
+  # Navigation
+  go_router: ^14.2.7
+
+  # Storage
+  shared_preferences: ^2.5.5
+  path_provider: ^2.1.5
+  path: ^1.9.1
+
+  # PDF
+  pdf: ^3.11.1
+  printing: ^5.13.2
+
+  # Charts
+  fl_chart: ^0.69.0
+
+  # Image
+  image_picker: ^1.1.2
+
+  # Utils
+  uuid: ^4.5.1
+  intl: ^0.20.0
+  crypto: ^3.0.5
+  cupertino_icons: ^1.0.8
+  easy_localization: ^3.0.7
+  file_picker: ^10.3.10
+  package_info_plus: ^9.0.1
+  esc_pos_utils_plus: ^2.0.4
+  arabic_reshaper: ^0.0.1
+  screenshot: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: false
+
+  assets:
+    - assets/images/
+    - assets/fonts/
+    - assets/translations/
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Cairo-SemiBold.ttf
+          weight: 600
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/InterDisplay-SemiBold.ttf
+          weight: 600
+    - family: NotoSansBengali
+      fonts:
+        - asset: assets/fonts/NotoSansBengali-Regular.ttf
+        - asset: assets/fonts/NotoSansBengali-Bold.ttf
+          weight: 700
