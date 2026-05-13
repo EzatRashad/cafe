@@ -22,20 +22,20 @@ class KeyboardView extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(32),
-        topRight: Radius.circular(32),
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
       ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
           decoration: BoxDecoration(
             color: isDark
                 ? darkBrown.withValues(alpha: 0.85)
                 : Colors.white.withValues(alpha: 0.85),
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(32),
-              topRight: Radius.circular(32),
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
             ),
             border: Border.all(
               color: accentGold.withValues(alpha: 0.2),
@@ -58,14 +58,14 @@ class KeyboardView extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 4,
-                  margin: const EdgeInsets.only(bottom: 12),
+                  margin: const EdgeInsets.only(bottom: 4),
                   decoration: BoxDecoration(
                     color: accentGold.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
                 _buildPremiumHeader(context, state, isDark),
-                const SizedBox(height: 12),
+                const SizedBox(height: 4),
                 _buildLayout(state),
               ],
             ),
@@ -85,7 +85,7 @@ class KeyboardView extends StatelessWidget {
       children: [
         // Type Indicator
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: accentGold.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(20),
@@ -166,7 +166,7 @@ class KeyboardView extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
           color: active ? accentGold : Colors.transparent,
           borderRadius: BorderRadius.circular(20),

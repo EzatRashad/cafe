@@ -14,29 +14,29 @@ class NumericLayout extends StatelessWidget {
 
     return Column(
       children: [
-        _buildRow(["1", "2", "3"], cubit, height: 70),
-        _buildRow(["4", "5", "6"], cubit, height: 70),
-        _buildRow(["7", "8", "9"], cubit, height: 70),
+        _buildRow(["1", "2", "3"], cubit, height: 52),
+        _buildRow(["4", "5", "6"], cubit, height: 52),
+        _buildRow(["7", "8", "9"], cubit, height: 52),
         Row(
           children: [
             if (state.type == CafeKeyboardType.amount ||
                 state.type == CafeKeyboardType.numeric)
               KeyButton(
                 label: ".",
-                height: 70,
+                height: 52,
                 onTap: () => cubit.onKeyPressed("."),
               )
             else
               const Spacer(),
             KeyButton(
               label: "0",
-              height: 70,
+              height: 52,
               onTap: () => cubit.onKeyPressed("0"),
             ),
             KeyButton(
               icon: const Icon(Icons.backspace_outlined),
               isSpecial: true,
-              height: 70,
+              height: 52,
               onTap: () => cubit.onBackspace(),
             ),
           ],
@@ -46,13 +46,13 @@ class NumericLayout extends StatelessWidget {
             KeyButton(
               label: "ABC",
               isSpecial: true,
-              height: 70,
+              height: 52,
               onTap: () => cubit.show(CafeKeyboardType.text),
             ),
             KeyButton(
               label: "Clear",
               isSpecial: true,
-              height: 70,
+              height: 52,
               color: Colors.red.withOpacity(0.1),
               textColor: Colors.red,
               onTap: () => cubit.onClear(),
@@ -61,7 +61,7 @@ class NumericLayout extends StatelessWidget {
               label: "Done",
               flex: 2,
               isSpecial: true,
-              height: 70,
+              height: 52,
               color: const Color(0xFFD4AF37),
               textColor: Colors.white,
               onTap: () => cubit.onDone(),

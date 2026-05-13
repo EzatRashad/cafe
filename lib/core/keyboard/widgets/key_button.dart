@@ -74,17 +74,17 @@ class _KeyButtonState extends State<KeyButton>
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(2.0),
           child: ScaleTransition(
             scale: _scaleAnimation,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              height: widget.height ?? 60,
+              height: widget.height ?? 46,
               decoration: BoxDecoration(
                 color: _isHovered
                     ? finalColor!.withValues(alpha: 0.9)
                     : finalColor,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 border: widget.isSpecial
                     ? Border.all(
                         color: accentGold.withValues(alpha: 0.3), width: 1.5)
@@ -108,13 +108,13 @@ class _KeyButtonState extends State<KeyButton>
                     HapticFeedback.mediumImpact();
                     widget.onTap();
                   },
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   child: Center(
                     child: widget.label != null
                         ? Text(
                             widget.label!,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: finalTextColor,
                               fontFamily: 'Cairo',
