@@ -43,22 +43,21 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
   @override
   Future<String> saveInvoice(InvoiceModel invoice) async {
     final id = _uuid.v4();
-    final model = InvoiceModel(
+    final model = invoice.copyWith(
       id: id,
       createdAt: DateTime.now(),
-      paymentMethod: invoice.paymentMethod,
-      total: invoice.total,
       status: 'closed',
-      items: invoice.items,
     );
-    final itemMaps = model.items.map((item) => InvoiceItemModel(
-          id: _uuid.v4(),
-          invoiceId: id,
-          productId: item.productId,
-          productName: item.productName,
-          price: item.price,
-          quantity: item.quantity,
-        ).toMap()).toList();
+    final itemMaps = model.items
+        .map((item) => InvoiceItemModel(
+              id: _uuid.v4(),
+              invoiceId: id,
+              productId: item.productId,
+              productName: item.productName,
+              price: item.price,
+              quantity: item.quantity,
+            ).toMap())
+        .toList();
     await _db.insertInvoice(model.toMap(), itemMaps);
     return id;
   }

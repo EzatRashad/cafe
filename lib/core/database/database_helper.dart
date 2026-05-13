@@ -71,16 +71,18 @@ class DatabaseHelper {
       return await databaseFactoryFfi.openDatabase(
         path,
         options: OpenDatabaseOptions(
-          version: 1,
+          version: 3,
           onCreate: _onCreate,
+          onUpgrade: _onUpgrade,
           onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
         ),
       );
     } else {
       return await openDatabase(
         path,
-        version: 1,
+        version: 3,
         onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
         onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
       );
     }
@@ -123,6 +125,13 @@ class DatabaseHelper {
         created_at TEXT NOT NULL,
         payment_method TEXT NOT NULL,
         total REAL NOT NULL,
+        tax_enabled INTEGER DEFAULT 0,
+        tax_percent REAL DEFAULT 0,
+        tax_amount REAL DEFAULT 0,
+        discount_enabled INTEGER DEFAULT 0,
+        discount_type TEXT DEFAULT 'percentage',
+        discount_value REAL DEFAULT 0,
+        discount_amount REAL DEFAULT 0,
         status TEXT DEFAULT 'closed'
       )
     ''');
@@ -148,6 +157,20 @@ class DatabaseHelper {
         created_at TEXT NOT NULL
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE invoices ADD COLUMN tax_enabled INTEGER DEFAULT 0');
+      await db.execute('ALTER TABLE invoices ADD COLUMN tax_percent REAL DEFAULT 0');
+      await db.execute('ALTER TABLE invoices ADD COLUMN tax_amount REAL DEFAULT 0');
+    }
+    if (oldVersion < 3) {
+      await db.execute('ALTER TABLE invoices ADD COLUMN discount_enabled INTEGER DEFAULT 0');
+      await db.execute('ALTER TABLE invoices ADD COLUMN discount_type TEXT DEFAULT "percentage"');
+      await db.execute('ALTER TABLE invoices ADD COLUMN discount_value REAL DEFAULT 0');
+      await db.execute('ALTER TABLE invoices ADD COLUMN discount_amount REAL DEFAULT 0');
+    }
   }
 
   // ── Auth ────────────────────────────────────────────────────────────────────

@@ -13,9 +13,14 @@ class SettingsCubit extends Cubit<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     final themeStr = prefs.getString(AppStrings.prefThemeKey) ?? 'light';
     final langCode = prefs.getString(AppStrings.prefLangKey) ?? 'en';
+    final taxEnabled = prefs.getBool(AppStrings.prefTaxEnabledKey) ?? false;
+    final taxPercent = prefs.getDouble(AppStrings.prefTaxPercentKey) ?? 15.0;
+
     emit(SettingsState(
       themeMode: themeStr == 'dark' ? ThemeMode.dark : ThemeMode.light,
       locale: Locale(langCode),
+      isTaxEnabled: taxEnabled,
+      taxPercent: taxPercent,
     ));
   }
 
@@ -31,5 +36,12 @@ class SettingsCubit extends Cubit<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(AppStrings.prefLangKey, langCode);
     emit(state.copyWith(locale: Locale(langCode)));
+  }
+
+  Future<void> updateTaxSettings(bool enabled, double percent) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(AppStrings.prefTaxEnabledKey, enabled);
+    await prefs.setDouble(AppStrings.prefTaxPercentKey, percent);
+    emit(state.copyWith(isTaxEnabled: enabled, taxPercent: percent));
   }
 }

@@ -79,11 +79,43 @@ class ThermalReceiptWidget extends StatelessWidget {
             const Divider(color: Colors.black, thickness: 1.5),
 
             // Summary
+            if (invoice.discountEnabled || invoice.taxEnabled) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('المجموع الفرعي:', style: TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                  Text('${invoice.subtotal.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                ],
+              ),
+              const SizedBox(height: 4),
+              if (invoice.discountEnabled && invoice.discountAmount > 0) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('الخصم (${invoice.discountType == 'percentage' ? '${invoice.discountValue}%' : 'قيمة ثابتة'}):',
+                        style: const TextStyle(fontSize: 16, fontFamily: 'Cairo', color: Colors.black)),
+                    Text('-${invoice.discountAmount.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+              if (invoice.taxEnabled) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('الضريبة (${invoice.taxPercent}%):', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                    Text('${invoice.taxAmount.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+              const Divider(color: Colors.black),
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('الإجمالي:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Cairo')),
-                Text('${invoice.total.toStringAsFixed(2)} ج.م', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Cairo')),
+                const Text('الإجمالي النهائي:', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'Cairo')),
+                Text('${invoice.total.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'Cairo')),
               ],
             ),
             const SizedBox(height: 8),

@@ -69,4 +69,9 @@ class AppStrings {
   static const String prefLangKey = 'language';
   static const String prefRememberKey = 'remember_me';
   static const String prefLoggedInKey = 'logged_in';
+  static const String prefTaxEnabledKey = 'tax_enabled';
+  static const String prefTaxPercentKey = 'tax_percent';
+  static const String prefDiscountEnabledKey = 'discount_enabled';
+  static const String prefDiscountTypeKey = 'discount_type';
+  static const String prefDiscountValueKey = 'discount_value';
 }

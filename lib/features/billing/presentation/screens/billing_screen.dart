@@ -12,6 +12,7 @@ import '../../../products/data/repositories/product_repository.dart';
 import '../cubit/billing_cubit.dart';
 import '../../../settings/presentation/cubit/printer_cubit.dart';
 import '../../data/models/invoice_model.dart';
+import '../../../settings/presentation/cubit/settings_cubit.dart';
 import '../../../../core/keyboard/widgets/cafe_text_field.dart';
 import '../../../../core/keyboard/models/cafe_keyboard_type.dart';
 
@@ -428,59 +429,164 @@ class _InvoicePanel extends StatelessWidget {
                       ),
           ),
           if (hasActiveTab)
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isDark ? AppColors.darkCard : AppColors.background,
-                border: const Border(top: BorderSide(color: AppColors.divider)),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('total'.tr(), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                      Text('${tab!.total.toStringAsFixed(2)}',
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.accent)),
-                    ],
+            BlocBuilder<SettingsCubit, SettingsState>(
+              builder: (context, settings) {
+                final taxAmount = tab!.calculateTax(settings.isTaxEnabled, settings.taxPercent);
+                final discountAmount = tab.calculateDiscount();
+                final finalTotal = tab.calculateTotal(
+                  taxEnabled: settings.isTaxEnabled,
+                  taxPercent: settings.taxPercent,
+                );
+
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkCard : AppColors.background,
+                    border: const Border(top: BorderSide(color: AppColors.divider)),
                   ),
-                  const SizedBox(height: 10),
-                  Row(
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: _PayBtn(
-                          label: 'cash'.tr(),
-                          icon: Icons.payments_rounded,
-                          selected: tab.paymentMethod == 'cash',
-                          color: AppColors.cashColor,
-                          onTap: () {
-                            cubit.setPaymentMethod('cash');
-                          },
+                      // Manual Discount Section
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  _DiscountTypeToggle(
+                                    label: '%',
+                                    selected: tab.discountType == 'percentage',
+                                    onTap: () => cubit.setDiscount(
+                                      enabled: tab.discountEnabled,
+                                      type: 'percentage',
+                                      value: tab.discountValue,
+                                    ),
+                                  ),
+                                  _DiscountTypeToggle(
+                                    label: 'fixed'.tr(),
+                                    selected: tab.discountType == 'fixed',
+                                    onTap: () => cubit.setDiscount(
+                                      enabled: tab.discountEnabled,
+                                      type: 'fixed',
+                                      value: tab.discountValue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              flex: 3,
+                              child: SizedBox(
+                                height: 36,
+                                child: CafeTextField(
+                                  key: ValueKey(tab.tabId),
+                                  initialValue: tab.discountValue > 0 ? tab.discountValue.toString() : '',
+                                  hintText: 'discount'.tr(),
+                                  keyboardType: CafeKeyboardType.numeric,
+                                  onChanged: (val) {
+                                    final d = double.tryParse(val) ?? 0;
+                                    cubit.setDiscount(
+                                      enabled: d > 0,
+                                      type: tab.discountType,
+                                      value: d,
+                                    );
+                                  },
+                                  prefixIcon: const Icon(Icons.local_offer_rounded, size: 16),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _PayBtn(
-                          label: 'card'.tr(),
-                          icon: Icons.credit_card_rounded,
-                          selected: tab.paymentMethod == 'card',
-                          color: AppColors.cardColor,
-                          onTap: () {
-                            cubit.setPaymentMethod('card');
-                          },
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('subtotal'.tr(), style: const TextStyle(fontSize: 14)),
+                          Text('${tab.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 14)),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      if (tab.discountEnabled && discountAmount > 0) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${'discount'.tr()} (${tab.discountType == 'percentage' ? '${tab.discountValue}%' : 'fixedAmount'.tr()})',
+                              style: const TextStyle(fontSize: 14, color: AppColors.error),
+                            ),
+                            Text('-${discountAmount.toStringAsFixed(2)}',
+                                style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                          ],
                         ),
+                        const SizedBox(height: 4),
+                      ],
+                      if (settings.isTaxEnabled) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${'tax'.tr()} (${settings.taxPercent}%)', style: const TextStyle(fontSize: 14)),
+                            Text('${taxAmount.toStringAsFixed(2)}', style: const TextStyle(fontSize: 14)),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                      ],
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('total'.tr(), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                          Text('${finalTotal.toStringAsFixed(2)}',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.accent)),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _PayBtn(
+                              label: 'cash'.tr(),
+                              icon: Icons.payments_rounded,
+                              selected: tab.paymentMethod == 'cash',
+                              color: AppColors.cashColor,
+                              onTap: () {
+                                cubit.setPaymentMethod('cash');
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: _PayBtn(
+                              label: 'card'.tr(),
+                              icon: Icons.credit_card_rounded,
+                              selected: tab.paymentMethod == 'card',
+                              color: AppColors.cardColor,
+                              onTap: () {
+                                cubit.setPaymentMethod('card');
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        label: 'saveAndPrint'.tr(),
+                        icon: Icons.print_rounded,
+                        isLoading: state.isSaving,
+                        onPressed: (tab.items.isEmpty || tab.paymentMethod == null)
+                            ? null
+                            : () => cubit.saveCurrentInvoice(
+                                  taxEnabled: settings.isTaxEnabled,
+                                  taxPercent: settings.taxPercent,
+                                ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  AppButton(
-                    label: 'saveAndPrint'.tr(),
-                    icon: Icons.print_rounded,
-                    isLoading: state.isSaving,
-                    onPressed: (tab.items.isEmpty || tab.paymentMethod == null) ? null : cubit.saveCurrentInvoice,
-                  ),
-                ],
-              ),
+                );
+              },
             ),
         ],
       ),
@@ -504,6 +610,42 @@ class _QtyButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Icon(icon, size: 16, color: AppColors.accent),
+      ),
+    );
+  }
+}
+
+class _DiscountTypeToggle extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _DiscountTypeToggle({required this.label, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 36,
+          margin: const EdgeInsets.only(right: 4),
+          decoration: BoxDecoration(
+            color: selected ? AppColors.accent : AppColors.background,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: selected ? AppColors.accentDark : AppColors.divider),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                color: selected ? AppColors.primaryDark : AppColors.textSecondary,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

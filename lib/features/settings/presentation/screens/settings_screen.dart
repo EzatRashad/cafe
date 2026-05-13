@@ -132,6 +132,18 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    
+                    // Billing Settings
+                    _SectionTitle('taxSettings'.tr()),
+                    AppCard(
+                      child: ListTile(
+                        leading: const Icon(Icons.receipt_long_rounded, color: AppColors.primary),
+                        title: Text('taxSettings'.tr()),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                        onTap: () => context.push(AppRoutes.taxSettings),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
 
                     // Printer Settings
                     _SectionTitle('إعدادات الطابعة'),

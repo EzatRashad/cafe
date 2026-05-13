@@ -124,5 +124,20 @@
   "loss": "ক্ষতি",
   "topSellingProducts": "সেরা বিক্রিত পণ্য",
   "enterName": "নাম লিখুন",
-  "rename": "নাম পরিবর্তন করুন"
+  "rename": "নাম পরিবর্তন করুন",
+
+  "dataSendError": "প্রিন্টারে ডেটা পাঠানো সম্ভব হয়নি। নিশ্চিত করুন যে এটি সংযুক্ত এবং চালু আছে।",
+  "taxSettings": "ট্যাক্স সেটিংস",
+  "taxEnabled": "ট্যাক্স চালু করুন",
+  "taxPercent": "ট্যাক্স পার্সেন্টেজ",
+  "subtotal": "মোটের আগে",
+  "tax": "ট্যাক্স",
+  "discountSettings": "ছাড় সেটিংস",
+  "discountEnabled": "ছাড় চালু করুন",
+  "discountType": "ছাড়ের ধরন",
+  "percentage": "শতাংশ",
+  "fixedAmount": "নির্দিষ্ট পরিমাণ",
+  "defaultValue": "ডিফল্ট ছাড়ের পরিমাণ",
+  "discount": "ছাড়",
+  "saveAndPrint": "সংরক্ষণ ও প্রিন্ট" 
 }

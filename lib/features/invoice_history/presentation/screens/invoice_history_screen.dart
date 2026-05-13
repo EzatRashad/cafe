@@ -5,6 +5,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/date_formatter.dart';
 import '../../../../shared/widgets/common_widgets.dart';
 import '../../../billing/data/models/invoice_model.dart';
+import 'invoice_details_screen.dart';
 import '../cubit/invoice_history_cubit.dart';
 import '../../../settings/presentation/cubit/printer_cubit.dart';
 
@@ -68,15 +69,32 @@ class _Header extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          Text('invoiceHistory'.tr(), style: Theme.of(context).textTheme.headlineMedium),
+          Text('invoiceHistory'.tr(),
+              style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(width: 16),
           Wrap(
             spacing: 8,
             children: [
-              _FilterChip(label: 'today'.tr(), filter: DateFilter.today, current: state.filter, cubit: cubit),
-              _FilterChip(label: 'thisMonth'.tr(), filter: DateFilter.thisMonth, current: state.filter, cubit: cubit),
-              _FilterChip(label: 'thisYear'.tr(), filter: DateFilter.thisYear, current: state.filter, cubit: cubit),
-              _FilterChip(label: 'all'.tr(), filter: DateFilter.all, current: state.filter, cubit: cubit),
+              _FilterChip(
+                  label: 'today'.tr(),
+                  filter: DateFilter.today,
+                  current: state.filter,
+                  cubit: cubit),
+              _FilterChip(
+                  label: 'thisMonth'.tr(),
+                  filter: DateFilter.thisMonth,
+                  current: state.filter,
+                  cubit: cubit),
+              _FilterChip(
+                  label: 'thisYear'.tr(),
+                  filter: DateFilter.thisYear,
+                  current: state.filter,
+                  cubit: cubit),
+              _FilterChip(
+                  label: 'all'.tr(),
+                  filter: DateFilter.all,
+                  current: state.filter,
+                  cubit: cubit),
               ActionChip(
                 label: Text('custom'.tr()),
                 avatar: const Icon(Icons.date_range_rounded, size: 16),
@@ -89,14 +107,18 @@ class _Header extends StatelessWidget {
     );
   }
 
-  Future<void> _pickCustomRange(BuildContext context, InvoiceHistoryCubit cubit) async {
+  Future<void> _pickCustomRange(
+      BuildContext context, InvoiceHistoryCubit cubit) async {
     final range = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
     if (range != null) {
-      cubit.load(filter: DateFilter.custom, customFrom: range.start, customTo: range.end);
+      cubit.load(
+          filter: DateFilter.custom,
+          customFrom: range.start,
+          customTo: range.end);
     }
   }
 }
@@ -106,7 +128,11 @@ class _FilterChip extends StatelessWidget {
   final DateFilter filter;
   final DateFilter current;
   final InvoiceHistoryCubit cubit;
-  const _FilterChip({required this.label, required this.filter, required this.current, required this.cubit});
+  const _FilterChip(
+      {required this.label,
+      required this.filter,
+      required this.current,
+      required this.cubit});
 
   @override
   Widget build(BuildContext context) {
@@ -131,13 +157,33 @@ class _SummaryRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Row(
         children: [
-          Expanded(child: StatCard(title: 'cashIncome'.tr(), value: state.cashIncome.toStringAsFixed(2), icon: Icons.payments_rounded, color: AppColors.cashColor)),
+          Expanded(
+              child: StatCard(
+                  title: 'cashIncome'.tr(),
+                  value: state.cashIncome.toStringAsFixed(2),
+                  icon: Icons.payments_rounded,
+                  color: AppColors.cashColor)),
           const SizedBox(width: 12),
-          Expanded(child: StatCard(title: 'cardIncome'.tr(), value: state.cardIncome.toStringAsFixed(2), icon: Icons.credit_card_rounded, color: AppColors.cardColor)),
+          Expanded(
+              child: StatCard(
+                  title: 'cardIncome'.tr(),
+                  value: state.cardIncome.toStringAsFixed(2),
+                  icon: Icons.credit_card_rounded,
+                  color: AppColors.cardColor)),
           const SizedBox(width: 12),
-          Expanded(child: StatCard(title: 'totalIncome'.tr(), value: state.totalIncome.toStringAsFixed(2), icon: Icons.account_balance_wallet_rounded, color: AppColors.accent)),
+          Expanded(
+              child: StatCard(
+                  title: 'totalIncome'.tr(),
+                  value: state.totalIncome.toStringAsFixed(2),
+                  icon: Icons.account_balance_wallet_rounded,
+                  color: AppColors.accent)),
           const SizedBox(width: 12),
-          Expanded(child: StatCard(title: 'reports'.tr(), value: '${state.invoices.length}', icon: Icons.receipt_long_rounded, color: AppColors.primary)),
+          Expanded(
+              child: StatCard(
+                  title: 'reports'.tr(),
+                  value: '${state.invoices.length}',
+                  icon: Icons.receipt_long_rounded,
+                  color: AppColors.primary)),
         ],
       ),
     );
@@ -156,62 +202,121 @@ class _InvoiceTable extends StatelessWidget {
         padding: EdgeInsets.zero,
         child: SingleChildScrollView(
           child: DataTable(
-            headingRowColor: WidgetStateProperty.all(AppColors.accent.withValues(alpha: 0.1)),
+            headingRowColor: WidgetStateProperty.all(
+                AppColors.accent.withValues(alpha: 0.1)),
             columns: [
-              const DataColumn(label: Text('#', style: TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('date'.tr(), style: const TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('products'.tr(), style: const TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('paymentMethod'.tr(), style: const TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('total'.tr(), style: const TextStyle(fontWeight: FontWeight.bold))),
-              DataColumn(label: Text('search'.tr(), style: const TextStyle(fontWeight: FontWeight.bold))),
+              const DataColumn(
+                  label:
+                      Text('#', style: TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('date'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('products'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('paymentMethod'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('discount'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('tax'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('total'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              DataColumn(
+                  label: Text('search'.tr(),
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
             ],
             rows: invoices.asMap().entries.map((e) {
               final i = e.key;
               final inv = e.value;
-              return DataRow(cells: [
-                DataCell(Text('${i + 1}')),
-                DataCell(Text(DateFormatter.formatDisplayDateTime(inv.createdAt))),
-                DataCell(Text('${inv.items.length} ' + 'products'.tr())),
-                DataCell(
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: (inv.paymentMethod == 'cash' ? AppColors.cashColor : AppColors.cardColor).withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      inv.paymentMethod == 'cash' ? 'cash'.tr() : 'card'.tr(),
-                      style: TextStyle(
-                        color: inv.paymentMethod == 'cash' ? AppColors.cashColor : AppColors.cardColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 11,
+              return DataRow(
+                  onSelectChanged: (_) => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => InvoiceDetailsScreen(invoice: inv)),
+                      ),
+                  cells: [
+                    DataCell(Text('${i + 1}')),
+                    DataCell(Text(
+                        DateFormatter.formatDisplayDateTime(inv.createdAt))),
+                    DataCell(Text('${inv.items.length} ${'products'.tr()}')),
+                    DataCell(
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: (inv.paymentMethod == 'cash'
+                                  ? AppColors.cashColor
+                                  : AppColors.cardColor)
+                              .withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          inv.paymentMethod == 'cash'
+                              ? 'cash'.tr()
+                              : 'card'.tr(),
+                          style: TextStyle(
+                            color: inv.paymentMethod == 'cash'
+                                ? AppColors.cashColor
+                                : AppColors.cardColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                DataCell(Text(inv.total.toStringAsFixed(2), style: const TextStyle(fontWeight: FontWeight.bold))),
-                DataCell(
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.print_rounded, size: 18, color: AppColors.accent),
-                        onPressed: () => context.read<PrinterCubit>().printInvoice(inv),
-                        tooltip: 'print'.tr(),
+                    DataCell(Text(
+                        inv.discountAmount > 0
+                            ? '-${inv.discountAmount.toStringAsFixed(2)} ر.س'
+                            : '0.00 ر.س',
+                        style: const TextStyle(
+                            color: AppColors.error, fontSize: 12))),
+                    DataCell(Text('${inv.taxAmount.toStringAsFixed(2)} ر.س',
+                        style: const TextStyle(
+                            color: AppColors.textSecondary, fontSize: 12))),
+                    DataCell(Text('${inv.total.toStringAsFixed(2)} ر.س',
+                        style: const TextStyle(fontWeight: FontWeight.bold))),
+                    DataCell(
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.visibility_rounded,
+                                size: 18, color: Colors.grey),
+                            onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) =>
+                                      InvoiceDetailsScreen(invoice: inv)),
+                            ),
+                            tooltip: 'view'.tr(),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.print_rounded,
+                                size: 18, color: AppColors.accent),
+                            onPressed: () =>
+                                context.read<PrinterCubit>().printInvoice(inv),
+                            tooltip: 'print'.tr(),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit_rounded,
+                                size: 18, color: AppColors.primary),
+                            onPressed: () => _showEditDialog(context, inv),
+                            tooltip: 'edit'.tr(),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_rounded,
+                                size: 18, color: AppColors.error),
+                            onPressed: () => _confirmDelete(context, inv),
+                            tooltip: 'delete'.tr(),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.edit_rounded, size: 18, color: AppColors.primary),
-                        onPressed: () => _showEditDialog(context, inv),
-                        tooltip: 'edit'.tr(),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete_rounded, size: 18, color: AppColors.error),
-                        onPressed: () => _confirmDelete(context, inv),
-                        tooltip: 'delete'.tr(),
-                      ),
-                    ],
-                  ),
-                ),
-              ]);
+                    ),
+                  ]);
             }).toList(),
           ),
         ),
@@ -236,14 +341,16 @@ class _InvoiceTable extends StatelessWidget {
         title: Text('delete'.tr()),
         content: Text('confirmDelete'.tr()),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('cancel'.tr())),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx), child: Text('cancel'.tr())),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             onPressed: () {
               context.read<InvoiceHistoryCubit>().deleteInvoice(invoice.id);
               Navigator.pop(ctx);
             },
-            child: Text('delete'.tr(), style: const TextStyle(color: Colors.white)),
+            child: Text('delete'.tr(),
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -268,12 +375,27 @@ class _EditInvoiceDialogState extends State<_EditInvoiceDialog> {
     _items = List.from(widget.invoice.items);
   }
 
-  double get _total => _items.fold(0.0, (sum, i) => sum + i.subtotal);
+  double get _subtotal => _items.fold(0.0, (sum, i) => sum + i.subtotal);
+  double get _discountAmount {
+    if (!widget.invoice.discountEnabled || widget.invoice.discountValue <= 0)
+      return 0;
+    if (widget.invoice.discountType == 'percentage') {
+      return _subtotal * (widget.invoice.discountValue / 100);
+    } else {
+      return widget.invoice.discountValue;
+    }
+  }
+
+  double get _taxAmount => widget.invoice.taxEnabled
+      ? _subtotal * (widget.invoice.taxPercent / 100)
+      : 0;
+  double get _total => _subtotal - _discountAmount + _taxAmount;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('edit'.tr() + ' — ${DateFormatter.formatDisplayDateTime(widget.invoice.createdAt)}'),
+      title: Text(
+          '${'edit'.tr()} — ${DateFormatter.formatDisplayDateTime(widget.invoice.createdAt)}'),
       content: SizedBox(
         width: 500,
         child: SingleChildScrollView(
@@ -286,7 +408,7 @@ class _EditInvoiceDialogState extends State<_EditInvoiceDialog> {
                 return ListTile(
                   dense: true,
                   title: Text(item.productName),
-                  subtitle: Text('${item.price.toStringAsFixed(2)}'),
+                  subtitle: Text(item.price.toStringAsFixed(2)),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -294,17 +416,21 @@ class _EditInvoiceDialogState extends State<_EditInvoiceDialog> {
                         icon: const Icon(Icons.remove, size: 18),
                         onPressed: () {
                           if (item.quantity > 1) {
-                            setState(() => _items[i] = item.copyWith(quantity: item.quantity - 1));
+                            setState(() => _items[i] =
+                                item.copyWith(quantity: item.quantity - 1));
                           }
                         },
                       ),
-                      Text('${item.quantity}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text('${item.quantity}',
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                       IconButton(
                         icon: const Icon(Icons.add, size: 18),
-                        onPressed: () => setState(() => _items[i] = item.copyWith(quantity: item.quantity + 1)),
+                        onPressed: () => setState(() => _items[i] =
+                            item.copyWith(quantity: item.quantity + 1)),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 18),
+                        icon: const Icon(Icons.delete_outline,
+                            color: AppColors.error, size: 18),
                         onPressed: () => setState(() => _items.removeAt(i)),
                       ),
                     ],
@@ -312,12 +438,58 @@ class _EditInvoiceDialogState extends State<_EditInvoiceDialog> {
                 );
               }),
               const Divider(),
+              if (widget.invoice.discountEnabled ||
+                  widget.invoice.taxEnabled) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('subtotal'.tr(), style: const TextStyle(fontSize: 14)),
+                    Text(_subtotal.toStringAsFixed(2),
+                        style: const TextStyle(fontSize: 14)),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                if (widget.invoice.discountEnabled && _discountAmount > 0) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${'discount'.tr()} (${widget.invoice.discountType == 'percentage' ? '${widget.invoice.discountValue}%' : 'fixedAmount'.tr()})',
+                        style: const TextStyle(
+                            fontSize: 14, color: AppColors.error),
+                      ),
+                      Text('-${_discountAmount.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                              fontSize: 14, color: AppColors.error)),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                ],
+                if (widget.invoice.taxEnabled) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${'tax'.tr()} (${widget.invoice.taxPercent}%)',
+                          style: const TextStyle(fontSize: 14)),
+                      Text(_taxAmount.toStringAsFixed(2),
+                          style: const TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                ],
+                const Divider(),
+              ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('total'.tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text('total'.tr(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16)),
                   Text(_total.toStringAsFixed(2),
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.accent)),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: AppColors.accent)),
                 ],
               ),
             ],
@@ -325,14 +497,21 @@ class _EditInvoiceDialogState extends State<_EditInvoiceDialog> {
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: Text('cancel'.tr())),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('cancel'.tr())),
         AppButton(
           label: 'save'.tr(),
           width: 130,
           onPressed: () {
             Navigator.pop(context);
             context.read<InvoiceHistoryCubit>().updateInvoice(
-                  widget.invoice.copyWith(items: _items, total: _total),
+                  widget.invoice.copyWith(
+                    items: _items,
+                    total: _total,
+                    taxAmount: _taxAmount,
+                    discountAmount: _discountAmount,
+                  ),
                 );
           },
         ),

@@ -14,29 +14,64 @@ class InvoiceTab extends Equatable {
   final String label;
   final List<InvoiceItemModel> items;
   final String? paymentMethod;
+  final bool discountEnabled;
+  final String discountType; // 'percentage' | 'fixed'
+  final double discountValue;
 
   const InvoiceTab({
     required this.tabId,
     required this.label,
     this.items = const [],
     this.paymentMethod,
+    this.discountEnabled = false,
+    this.discountType = 'percentage',
+    this.discountValue = 0,
   });
 
   @override
-  List<Object?> get props => [tabId, label, items, paymentMethod];
+  List<Object?> get props => [tabId, label, items, paymentMethod, discountEnabled, discountType, discountValue];
 
-  double get total => items.fold(0, (sum, i) => sum + i.subtotal);
+  double get subtotal => items.fold(0, (sum, i) => sum + i.subtotal);
+
+  double calculateTax(bool enabled, double percent) {
+    if (!enabled) return 0;
+    return subtotal * (percent / 100);
+  }
+
+  double calculateDiscount() {
+    if (!discountEnabled || discountValue <= 0) return 0;
+    if (discountType == 'percentage') {
+      return subtotal * (discountValue / 100);
+    } else {
+      return discountValue;
+    }
+  }
+
+  double calculateTotal({
+    required bool taxEnabled,
+    required double taxPercent,
+  }) {
+    final tax = calculateTax(taxEnabled, taxPercent);
+    final discount = calculateDiscount();
+    return subtotal - discount + tax;
+  }
 
   InvoiceTab copyWith({
     List<InvoiceItemModel>? items,
     String? paymentMethod,
     String? label,
+    bool? discountEnabled,
+    String? discountType,
+    double? discountValue,
   }) =>
       InvoiceTab(
         tabId: tabId,
         label: label ?? this.label,
         items: items ?? this.items,
         paymentMethod: paymentMethod ?? this.paymentMethod,
+        discountEnabled: discountEnabled ?? this.discountEnabled,
+        discountType: discountType ?? this.discountType,
+        discountValue: discountValue ?? this.discountValue,
       );
 
   Map<String, dynamic> toMap() => {
@@ -44,6 +79,9 @@ class InvoiceTab extends Equatable {
         'label': label,
         'items': items.map((i) => i.toMap()).toList(),
         'paymentMethod': paymentMethod,
+        'discountEnabled': discountEnabled ? 1 : 0,
+        'discountType': discountType,
+        'discountValue': discountValue,
       };
 
   factory InvoiceTab.fromMap(Map<String, dynamic> map) => InvoiceTab(
@@ -51,6 +89,9 @@ class InvoiceTab extends Equatable {
         label: map['label'] as String,
         items: (map['items'] as List).map((i) => InvoiceItemModel.fromMap(i)).toList(),
         paymentMethod: map['paymentMethod'] as String?,
+        discountEnabled: (map['discountEnabled'] as int? ?? 0) == 1,
+        discountType: map['discountType'] as String? ?? 'percentage',
+        discountValue: (map['discountValue'] as num? ?? 0).toDouble(),
       );
 }
 
@@ -174,23 +215,53 @@ class BillingCubit extends Cubit<BillingState> {
   }
 
   void setPaymentMethod(String method) {
+    if (state.activeTabIndex == -1) return;
     final tabs = List<InvoiceTab>.from(state.tabs);
     tabs[state.activeTabIndex] = tabs[state.activeTabIndex].copyWith(paymentMethod: method);
     emit(state.copyWith(tabs: tabs));
     _saveState();
   }
 
-  Future<void> saveCurrentInvoice() async {
+  void setDiscount({required bool enabled, String? type, double? value}) {
+    if (state.activeTabIndex == -1) return;
+    final tabs = List<InvoiceTab>.from(state.tabs);
+    tabs[state.activeTabIndex] = tabs[state.activeTabIndex].copyWith(
+      discountEnabled: enabled,
+      discountType: type,
+      discountValue: value,
+    );
+    emit(state.copyWith(tabs: tabs));
+    _saveState();
+  }
+
+  Future<void> saveCurrentInvoice({
+    required bool taxEnabled,
+    required double taxPercent,
+  }) async {
     if (state.activeTabIndex == -1 || state.tabs.isEmpty) return;
     
     final tab = state.tabs[state.activeTabIndex];
     if (tab.items.isEmpty || tab.paymentMethod == null) return;
 
+    final taxAmount = tab.calculateTax(taxEnabled, taxPercent);
+    final discountAmount = tab.calculateDiscount();
+    final finalTotal = tab.calculateTotal(
+      taxEnabled: taxEnabled,
+      taxPercent: taxPercent,
+    );
+
     final invoice = InvoiceModel(
       id: '',
       createdAt: DateTime.now(),
       paymentMethod: tab.paymentMethod!,
-      total: tab.total,
+      total: finalTotal,
+      taxPercent: taxPercent,
+      taxAmount: taxAmount,
+      taxEnabled: taxEnabled,
+      discountValue: tab.discountValue,
+      discountAmount: discountAmount,
+      discountType: tab.discountType,
+      discountEnabled: tab.discountEnabled,
       items: tab.items,
     );
 

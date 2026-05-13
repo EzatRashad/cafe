@@ -18,6 +18,7 @@ import '../../features/dashboard/presentation/cubit/dashboard_cubit.dart';
 import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
 
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/settings/presentation/screens/tax_settings_screen.dart';
 import '../../features/setup/presentation/cubit/storage_cubit.dart';
 import '../../features/setup/presentation/screens/setup_screen.dart';
 import '../../shared/widgets/app_shell.dart';
@@ -34,6 +35,7 @@ class AppRoutes {
   static const String expenses = '/expenses';
 
   static const String settings = '/settings';
+  static const String taxSettings = '/tax-settings';
   static const String setup = '/setup';
 }
 
@@ -134,6 +136,10 @@ GoRouter createRouter(AuthCubit authCubit, StorageCubit storageCubit) {
           GoRoute(
             path: AppRoutes.settings,
             builder: (context, state) => const SettingsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.taxSettings,
+            builder: (context, state) => const TaxSettingsScreen(),
           ),
         ],
       ),

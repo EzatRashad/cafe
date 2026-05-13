@@ -7,6 +7,8 @@ import '../models/cafe_keyboard_type.dart';
 class CafeTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? hintText;
+  final String? initialValue;
+  final Widget? prefixIcon;
   final CafeKeyboardType keyboardType;
   final bool autofocus;
   final InputDecoration? decoration;
@@ -20,6 +22,8 @@ class CafeTextField extends StatefulWidget {
     super.key,
     this.controller,
     this.hintText,
+    this.initialValue,
+    this.prefixIcon,
     this.keyboardType = CafeKeyboardType.text,
     this.autofocus = false,
     this.decoration,
@@ -41,8 +45,13 @@ class _CafeTextFieldState extends State<CafeTextField> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController();
+    _controller = widget.controller ?? TextEditingController(text: widget.initialValue);
     _focusNode.addListener(_onFocusChange);
+    _controller.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    widget.onChanged?.call(_controller.text);
   }
 
   void _onFocusChange() {
@@ -59,6 +68,7 @@ class _CafeTextFieldState extends State<CafeTextField> {
   @override
   void dispose() {
     _focusNode.removeListener(_onFocusChange);
+    _controller.removeListener(_onTextChanged);
     _focusNode.dispose();
     if (widget.controller == null) {
       _controller.dispose();
@@ -78,6 +88,7 @@ class _CafeTextFieldState extends State<CafeTextField> {
       validator: widget.validator,
       decoration: (widget.decoration ?? const InputDecoration()).copyWith(
         hintText: widget.hintText,
+        prefixIcon: widget.prefixIcon,
       ),
       onTap: _showKeyboard,
       onChanged: widget.onChanged,

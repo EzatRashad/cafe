@@ -150,5 +150,21 @@
   "printSuccess": "Printing successful",
   "printError": "An error occurred while printing: {}",
   "selectPrinterFirst": "Please select a printer from Settings first.",
-  "dataSendError": "Failed to send data to the printer. Ensure it is connected and turned on."
+  "dataSendError": "Failed to send data to the printer. Ensure it is connected and turned on.",
+  "taxSettings": "Tax Settings",
+  "taxEnabled": "Tax Enabled",
+  "taxPercent": "Tax Percentage",
+  "subtotal": "Subtotal",
+  "tax": "Tax",
+  "discountSettings": "Discount Settings",
+  "discountEnabled": "Discount Enabled",
+  "discountType": "Discount Type",
+  "percentage": "Percentage",
+  "fixedAmount": "Fixed Amount",
+  "defaultValue": "Default Discount Value",
+  "discount": "Discount",
+  "invoiceDetails": "Invoice Details",
+  "invoiceNumber": "Invoice Number",
+  "time": "Time",
+  "view": "View"
 }

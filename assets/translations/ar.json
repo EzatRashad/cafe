@@ -150,5 +150,21 @@
   "printSuccess": "تمت الطباعة بنجاح",
   "printError": "حدث خطأ أثناء الطباعة: {}",
   "selectPrinterFirst": "يرجى اختيار الطابعة أولاً من الإعدادات.",
-  "dataSendError": "فشل في إرسال البيانات للطابعة. تأكد من توصيلها وتشغيلها."
+  "dataSendError": "فشل في إرسال البيانات للطابعة. تأكد من توصيلها وتشغيلها.",
+  "taxSettings": "إعدادات الضريبة",
+  "taxEnabled": "تفعيل الضريبة",
+  "taxPercent": "نسبة الضريبة",
+  "subtotal": "المجموع الفرعي",
+  "tax": "الضريبة",
+  "discountSettings": "إعدادات الخصم",
+  "discountEnabled": "تفعيل الخصم",
+  "discountType": "نوع الخصم",
+  "percentage": "نسبة مئوية (%)",
+  "fixedAmount": "قيمة ثابتة",
+  "defaultValue": "قيمة الخصم الافتراضية",
+  "discount": "الخصم",
+  "invoiceDetails": "تفاصيل الفاتورة",
+  "invoiceNumber": "رقم الفاتورة",
+  "time": "الوقت",
+  "view": "عرض"
 }

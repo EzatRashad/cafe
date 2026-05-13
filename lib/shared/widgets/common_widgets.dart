@@ -64,8 +64,10 @@ class AppTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final Widget? prefixIcon;
+ 
   final Widget? suffixIcon;
   final int maxLines;
+
   final bool readOnly;
   final VoidCallback? onTap;
   final void Function(String)? onChanged;
