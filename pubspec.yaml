@@ -54,6 +54,11 @@ dependencies:
   arabic_reshaper: ^0.0.1
   screenshot: ^3.0.0
 
+  # Thermal Printing (Windows)
+  ffi: ^2.1.3
+  win32: ^5.5.0
+  image: ^4.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

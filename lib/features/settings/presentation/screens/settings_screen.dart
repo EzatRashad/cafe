@@ -1,3 +1,4 @@
+import 'package:cafe/core/printer/printer_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -184,10 +185,9 @@ class SettingsScreen extends StatelessWidget {
                           return const Center(
                               child: CircularProgressIndicator());
 
-                        final printers = state is PrinterLoaded
-                            ? state.availablePrinters
-                            : <String>[];
-                        final selected = state is PrinterLoaded
+                        final List<PrinterModel> printers =
+                            state is PrinterLoaded ? state.printers : [];
+                        final String? selected = state is PrinterLoaded
                             ? state.selectedPrinter
                             : null;
 
@@ -195,24 +195,30 @@ class SettingsScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               DropdownButtonFormField<String>(
-                                initialValue: selected != null &&
-                                        printers.contains(selected)
+                                value: (selected != null &&
+                                        printers.any((p) => p.name == selected))
                                     ? selected
                                     : null,
                                 isExpanded: true,
                                 decoration: const InputDecoration(
-                                  labelText: 'اختر الطابعة (USB)',
+                                  labelText: 'اختر الطابعة (USB/Thermal)',
                                   prefixIcon: Icon(Icons.print_rounded),
                                 ),
-                                items: printers
-                                    .map((p) => DropdownMenuItem(
-                                        value: p, child: Text(p)))
-                                    .toList(),
-                                onChanged: (val) {
-                                  if (val != null)
+                                hint: Text(printers.isEmpty
+                                    ? 'لم يتم العثور على طابعات'
+                                    : 'اختر طابعة الفواتير'),
+                                items: printers.map((PrinterModel p) {
+                                  return DropdownMenuItem<String>(
+                                    value: p.name,
+                                    child: Text(p.displayName),
+                                  );
+                                }).toList(),
+                                onChanged: (String? val) {
+                                  if (val != null) {
                                     context
                                         .read<PrinterCubit>()
                                         .selectPrinter(val);
+                                  }
                                 },
                               ),
                               const SizedBox(height: 12),
