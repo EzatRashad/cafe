@@ -22,7 +22,9 @@ class KeyboardOverlay extends StatelessWidget {
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    height: state.isVisible ? (MediaQuery.of(context).size.width > 900 ? 300 : 0) : 0,
+                    height: state.isVisible
+                        ? (MediaQuery.of(context).size.width > 900 ? 300 : 0)
+                        : 0,
                   ),
                 ],
               ),

@@ -38,7 +38,7 @@ class StorageService {
   /// Pick a directory using FilePicker (Windows only)
   Future<String?> pickDirectory() async {
     if (!Platform.isWindows) return await getDefaultPath();
-    
+
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath(
       dialogTitle: 'Select Folder for Café Egypt Data',
     );

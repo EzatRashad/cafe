@@ -3,8 +3,8 @@ import 'package:cafe/core/keyboard/models/cafe_keyboard_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../key_button.dart'; 
- 
+import '../key_button.dart';
+
 class EnglishLayout extends StatelessWidget {
   const EnglishLayout({super.key});
 
@@ -23,15 +23,21 @@ class EnglishLayout extends StatelessWidget {
         Row(
           children: [
             KeyButton(
-              icon: Icon(state.isCapsLockEnabled ? Icons.keyboard_capslock : Icons.arrow_upward),
+              icon: Icon(state.isCapsLockEnabled
+                  ? Icons.keyboard_capslock
+                  : Icons.arrow_upward),
               isSpecial: true,
-              color: state.isShiftEnabled || state.isCapsLockEnabled ? Colors.blue : null,
+              color: state.isShiftEnabled || state.isCapsLockEnabled
+                  ? Colors.blue
+                  : null,
               onTap: () => cubit.toggleShift(),
             ),
             ...["Z", "X", "C", "V", "B", "N", "M"].map((char) => KeyButton(
-              label: state.isShiftEnabled || state.isCapsLockEnabled ? char : char.toLowerCase(),
-              onTap: () => cubit.onKeyPressed(char),
-            )),
+                  label: state.isShiftEnabled || state.isCapsLockEnabled
+                      ? char
+                      : char.toLowerCase(),
+                  onTap: () => cubit.onKeyPressed(char),
+                )),
             KeyButton(
               icon: const Icon(Icons.backspace_outlined),
               isSpecial: true,
@@ -79,10 +85,12 @@ class EnglishLayout extends StatelessWidget {
 
   Widget _buildRow(List<String> keys, KeyboardCubit cubit) {
     return Row(
-      children: keys.map((key) => KeyButton(
-        label: key,
-        onTap: () => cubit.onKeyPressed(key),
-      )).toList(),
+      children: keys
+          .map((key) => KeyButton(
+                label: key,
+                onTap: () => cubit.onKeyPressed(key),
+              ))
+          .toList(),
     );
   }
 }

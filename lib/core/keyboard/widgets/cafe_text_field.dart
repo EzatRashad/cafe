@@ -45,7 +45,8 @@ class _CafeTextFieldState extends State<CafeTextField> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.initialValue);
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initialValue);
     _focusNode.addListener(_onFocusChange);
     _controller.addListener(_onTextChanged);
   }

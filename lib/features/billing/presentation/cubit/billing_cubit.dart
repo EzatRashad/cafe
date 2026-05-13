@@ -29,7 +29,15 @@ class InvoiceTab extends Equatable {
   });
 
   @override
-  List<Object?> get props => [tabId, label, items, paymentMethod, discountEnabled, discountType, discountValue];
+  List<Object?> get props => [
+        tabId,
+        label,
+        items,
+        paymentMethod,
+        discountEnabled,
+        discountType,
+        discountValue
+      ];
 
   double get subtotal => items.fold(0, (sum, i) => sum + i.subtotal);
 
@@ -87,7 +95,9 @@ class InvoiceTab extends Equatable {
   factory InvoiceTab.fromMap(Map<String, dynamic> map) => InvoiceTab(
         tabId: map['tabId'] as String,
         label: map['label'] as String,
-        items: (map['items'] as List).map((i) => InvoiceItemModel.fromMap(i)).toList(),
+        items: (map['items'] as List)
+            .map((i) => InvoiceItemModel.fromMap(i))
+            .toList(),
         paymentMethod: map['paymentMethod'] as String?,
         discountEnabled: (map['discountEnabled'] as int? ?? 0) == 1,
         discountType: map['discountType'] as String? ?? 'percentage',
@@ -123,8 +133,10 @@ class BillingCubit extends Cubit<BillingState> {
       if (raw != null) {
         final data = jsonDecode(raw);
         _tabCounter = data['tabCounter'] as int;
-        final tabs = (data['tabs'] as List).map((t) => InvoiceTab.fromMap(t)).toList();
-        final activeIndex = (data['activeTabIndex'] as int).clamp(0, tabs.length - 1);
+        final tabs =
+            (data['tabs'] as List).map((t) => InvoiceTab.fromMap(t)).toList();
+        final activeIndex =
+            (data['activeTabIndex'] as int).clamp(0, tabs.length - 1);
         emit(state.copyWith(tabs: tabs, activeTabIndex: activeIndex));
       }
     } catch (_) {}
@@ -152,7 +164,8 @@ class BillingCubit extends Cubit<BillingState> {
   void removeTab(int index) {
     if (state.tabs.isEmpty) return;
     final tabs = List<InvoiceTab>.from(state.tabs)..removeAt(index);
-    final newIndex = tabs.isEmpty ? -1 : (index >= tabs.length ? tabs.length - 1 : index);
+    final newIndex =
+        tabs.isEmpty ? -1 : (index >= tabs.length ? tabs.length - 1 : index);
     emit(state.copyWith(tabs: tabs, activeTabIndex: newIndex));
     _saveState();
   }
@@ -164,11 +177,12 @@ class BillingCubit extends Cubit<BillingState> {
 
   void addProductToCurrentTab(ProductModel product) {
     if (state.activeTabIndex == -1 || state.tabs.isEmpty) return;
-    
+
     final tabs = List<InvoiceTab>.from(state.tabs);
     final tab = tabs[state.activeTabIndex];
-    final existingIndex = tab.items.indexWhere((i) => i.productId == product.id);
-    
+    final existingIndex =
+        tab.items.indexWhere((i) => i.productId == product.id);
+
     List<InvoiceItemModel> newItems;
     if (existingIndex >= 0) {
       newItems = List<InvoiceItemModel>.from(tab.items);
@@ -217,7 +231,8 @@ class BillingCubit extends Cubit<BillingState> {
   void setPaymentMethod(String method) {
     if (state.activeTabIndex == -1) return;
     final tabs = List<InvoiceTab>.from(state.tabs);
-    tabs[state.activeTabIndex] = tabs[state.activeTabIndex].copyWith(paymentMethod: method);
+    tabs[state.activeTabIndex] =
+        tabs[state.activeTabIndex].copyWith(paymentMethod: method);
     emit(state.copyWith(tabs: tabs));
     _saveState();
   }
@@ -239,7 +254,7 @@ class BillingCubit extends Cubit<BillingState> {
     required double taxPercent,
   }) async {
     if (state.activeTabIndex == -1 || state.tabs.isEmpty) return;
-    
+
     final tab = state.tabs[state.activeTabIndex];
     if (tab.items.isEmpty || tab.paymentMethod == null) return;
 
@@ -268,13 +283,14 @@ class BillingCubit extends Cubit<BillingState> {
     emit(state.copyWith(isSaving: true));
     try {
       await _repo.saveInvoice(invoice);
-      
+
       // Remove the tab after saving instead of replacing
       final tabs = List<InvoiceTab>.from(state.tabs);
       final idx = state.activeTabIndex;
       tabs.removeAt(idx);
-      final newIndex = tabs.isEmpty ? -1 : (idx >= tabs.length ? tabs.length - 1 : idx);
-      
+      final newIndex =
+          tabs.isEmpty ? -1 : (idx >= tabs.length ? tabs.length - 1 : idx);
+
       emit(state.copyWith(
         tabs: tabs,
         activeTabIndex: newIndex,

@@ -15,11 +15,14 @@ class PrinterService {
 
     try {
       // EnumPrinters with PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS
-      EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 2, nullptr, 0, pNeeded, pReturned);
-      
+      EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 2,
+          nullptr, 0, pNeeded, pReturned);
+
       if (pNeeded.value > 0) {
         final pBuffer = calloc<BYTE>(pNeeded.value);
-        if (EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr, 2, pBuffer, pNeeded.value, pNeeded, pReturned) != 0) {
+        if (EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, nullptr,
+                2, pBuffer, pNeeded.value, pNeeded, pReturned) !=
+            0) {
           final pPrinterInfos = pBuffer.cast<PRINTER_INFO_2>();
           for (var i = 0; i < pReturned.value; i++) {
             final printerInfo = pPrinterInfos[i];
@@ -42,7 +45,7 @@ class PrinterService {
       final pPrinterName = printerName.toNativeUtf16();
       final hPrinter = calloc<HANDLE>();
       final docInfo = calloc<DOC_INFO_1>();
-      
+
       docInfo.ref.pDocName = 'Cafe Invoice'.toNativeUtf16();
       docInfo.ref.pOutputFile = nullptr;
       docInfo.ref.pDatatype = 'RAW'.toNativeUtf16();
@@ -78,7 +81,8 @@ class PrinterService {
         final dwWritten = calloc<DWORD>();
 
         // Try writing the data
-        int success = WritePrinter(hPrinter.value, pBytes, data.length, dwWritten);
+        int success =
+            WritePrinter(hPrinter.value, pBytes, data.length, dwWritten);
         final err = success == 0 ? GetLastError() : 0;
 
         EndPagePrinter(hPrinter.value);

@@ -27,7 +27,8 @@ class BackupService {
     }
 
     final jsonString = jsonEncode(backupData);
-    final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
+    final timestamp =
+        DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
     final file = File('$backupPath/backup_$timestamp.json');
     await file.writeAsString(jsonString);
 

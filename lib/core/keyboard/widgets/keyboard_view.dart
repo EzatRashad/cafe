@@ -14,7 +14,7 @@ class KeyboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<KeyboardCubit>().state;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     const darkBrown = Color(0xFF3E2723);
     const coffeeBrown = Color(0xFF5D4037);
     const accentGold = Color(0xFFD4AF37);
@@ -30,8 +30,8 @@ class KeyboardView extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
           decoration: BoxDecoration(
-            color: isDark 
-                ? darkBrown.withValues(alpha: 0.85) 
+            color: isDark
+                ? darkBrown.withValues(alpha: 0.85)
                 : Colors.white.withValues(alpha: 0.85),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(32),
@@ -75,7 +75,8 @@ class KeyboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildPremiumHeader(BuildContext context, KeyboardState state, bool isDark) {
+  Widget _buildPremiumHeader(
+      BuildContext context, KeyboardState state, bool isDark) {
     const accentGold = Color(0xFFD4AF37);
     const cream = Color(0xFFF5F5DC);
     const darkBrown = Color(0xFF3E2723);
@@ -130,7 +131,8 @@ class KeyboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageToggle(BuildContext context, KeyboardState state, bool isDark) {
+  Widget _buildLanguageToggle(
+      BuildContext context, KeyboardState state, bool isDark) {
     const accentGold = Color(0xFFD4AF37);
     const darkBrown = Color(0xFF3E2723);
     const cream = Color(0xFFF5F5DC);
@@ -168,13 +170,15 @@ class KeyboardView extends StatelessWidget {
         decoration: BoxDecoration(
           color: active ? accentGold : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: active ? [
-            BoxShadow(
-              color: accentGold.withValues(alpha: 0.3),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            )
-          ] : null,
+          boxShadow: active
+              ? [
+                  BoxShadow(
+                    color: accentGold.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  )
+                ]
+              : null,
         ),
         child: Text(
           label,
@@ -213,8 +217,8 @@ class KeyboardView extends StatelessWidget {
   }
 
   Widget _buildLayout(KeyboardState state) {
-    if (state.type == CafeKeyboardType.numeric || 
-        state.type == CafeKeyboardType.amount || 
+    if (state.type == CafeKeyboardType.numeric ||
+        state.type == CafeKeyboardType.amount ||
         state.type == CafeKeyboardType.quantity) {
       return const NumericLayout();
     }

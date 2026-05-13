@@ -34,7 +34,8 @@ Future<void> setupLocator() async {
   // Core
   sl.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
   sl.registerLazySingleton<StorageService>(() => StorageService(sl()));
-  sl.registerLazySingleton<BackupService>(() => BackupService(sl<DatabaseHelper>()));
+  sl.registerLazySingleton<BackupService>(
+      () => BackupService(sl<DatabaseHelper>()));
   sl.registerLazySingleton<PrinterService>(() => PrinterService());
   sl.registerLazySingleton<ReceiptGenerator>(() => ReceiptGenerator());
 
@@ -44,11 +45,14 @@ Future<void> setupLocator() async {
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
-  sl.registerLazySingleton<CategoryRepository>(() => CategoryRepositoryImpl(sl()));
-  sl.registerLazySingleton<ProductRepository>(() => ProductRepositoryImpl(sl()));
-  sl.registerLazySingleton<InvoiceRepository>(() => InvoiceRepositoryImpl(sl()));
-  sl.registerLazySingleton<ExpenseRepository>(() => ExpenseRepositoryImpl(sl()));
-
+  sl.registerLazySingleton<CategoryRepository>(
+      () => CategoryRepositoryImpl(sl()));
+  sl.registerLazySingleton<ProductRepository>(
+      () => ProductRepositoryImpl(sl()));
+  sl.registerLazySingleton<InvoiceRepository>(
+      () => InvoiceRepositoryImpl(sl()));
+  sl.registerLazySingleton<ExpenseRepository>(
+      () => ExpenseRepositoryImpl(sl()));
 
   // Cubit Singletons (App-wide scope)
   sl.registerLazySingleton<AuthCubit>(() => AuthCubit(sl()));
@@ -60,7 +64,6 @@ Future<void> setupLocator() async {
   sl.registerFactory<InvoiceHistoryCubit>(() => InvoiceHistoryCubit(sl()));
   sl.registerFactory<ExpenseCubit>(() => ExpenseCubit(sl()));
   sl.registerFactory<DashboardCubit>(() => DashboardCubit(sl()));
-
 
   // Settings - singleton so theme/language persist across navigation
   sl.registerLazySingleton<SettingsCubit>(() => SettingsCubit());

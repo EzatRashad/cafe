@@ -16,7 +16,9 @@ class SetupScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is StorageError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: AppColors.error),
+              SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColors.error),
             );
           }
         },
@@ -28,11 +30,15 @@ class SetupScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.folder_shared_rounded, size: 80, color: AppColors.primary),
+                  const Icon(Icons.folder_shared_rounded,
+                      size: 80, color: AppColors.primary),
                   const SizedBox(height: 24),
                   Text(
                     'setupTitle'.tr(),
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.primary),
+                    style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -42,34 +48,37 @@ class SetupScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
-                  
                   if (state is StorageLoading)
                     const CircularProgressIndicator()
                   else ...[
                     AppButton(
                       label: 'selectFolder'.tr(),
                       icon: Icons.drive_file_move_rounded,
-                      onPressed: () => context.read<StorageCubit>().selectAndConfirmFolder(),
+                      onPressed: () =>
+                          context.read<StorageCubit>().selectAndConfirmFolder(),
                     ),
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed: () => context.read<StorageCubit>().useDefaultStorage(),
-                      child: Text('useDefaultStorage'.tr(), style: const TextStyle(fontSize: 12)),
+                      onPressed: () =>
+                          context.read<StorageCubit>().useDefaultStorage(),
+                      child: Text('useDefaultStorage'.tr(),
+                          style: const TextStyle(fontSize: 12)),
                     ),
                   ],
-
                   if (state is StorageReady) ...[
                     const SizedBox(height: 24),
                     const Divider(),
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        const Icon(Icons.check_circle, color: AppColors.success, size: 20),
+                        const Icon(Icons.check_circle,
+                            color: AppColors.success, size: 20),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             '${'selectedPath'.tr()} ${state.path}',
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                            style: const TextStyle(
+                                fontSize: 12, color: AppColors.textSecondary),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

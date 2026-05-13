@@ -64,14 +64,16 @@ class InvoiceRepositoryImpl implements InvoiceRepository {
 
   @override
   Future<void> updateInvoice(InvoiceModel invoice) async {
-    final itemMaps = invoice.items.map((item) => InvoiceItemModel(
-          id: _uuid.v4(),
-          invoiceId: invoice.id,
-          productId: item.productId,
-          productName: item.productName,
-          price: item.price,
-          quantity: item.quantity,
-        ).toMap()).toList();
+    final itemMaps = invoice.items
+        .map((item) => InvoiceItemModel(
+              id: _uuid.v4(),
+              invoiceId: invoice.id,
+              productId: item.productId,
+              productName: item.productName,
+              price: item.price,
+              quantity: item.quantity,
+            ).toMap())
+        .toList();
     await _db.updateInvoice(
       invoice.id,
       invoice.toMap(),

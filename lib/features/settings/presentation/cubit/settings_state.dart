@@ -29,9 +29,12 @@ class SettingsState extends Equatable {
   bool get isDark => themeMode == ThemeMode.dark;
   String get fontFamily {
     switch (locale.languageCode) {
-      case 'ar': return 'Cairo';
-      case 'bn': return 'NotoSansBengali';
-      default: return 'Inter';
+      case 'ar':
+        return 'Cairo';
+      case 'bn':
+        return 'NotoSansBengali';
+      default:
+        return 'Inter';
     }
   }
 

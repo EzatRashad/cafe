@@ -104,7 +104,8 @@ class ExpensesScreen extends StatelessWidget {
                                 child: SingleChildScrollView(
                                   child: DataTable(
                                     headingRowColor: WidgetStateProperty.all(
-                                        AppColors.error.withValues(alpha: 0.08)),
+                                        AppColors.error
+                                            .withValues(alpha: 0.08)),
                                     columns: [
                                       const DataColumn(label: Text('#')),
                                       DataColumn(label: Text('date'.tr())),
@@ -131,11 +132,11 @@ class ExpensesScreen extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8, vertical: 2),
                                             decoration: BoxDecoration(
-                                              color: (expense.paymentType ==
-                                                          'cash'
-                                                      ? AppColors.cashColor
-                                                      : AppColors.cardColor)
-                                                  .withValues(alpha: 0.12),
+                                              color:
+                                                  (expense.paymentType == 'cash'
+                                                          ? AppColors.cashColor
+                                                          : AppColors.cardColor)
+                                                      .withValues(alpha: 0.12),
                                               borderRadius:
                                                   BorderRadius.circular(6),
                                             ),

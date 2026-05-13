@@ -9,15 +9,20 @@ abstract class StorageState extends Equatable {
 }
 
 class StorageInitial extends StorageState {}
+
 class StorageLoading extends StorageState {}
+
 class StorageRequired extends StorageState {}
+
 class StorageChecking extends StorageState {}
+
 class StorageReady extends StorageState {
   final String path;
   StorageReady(this.path);
   @override
   List<Object?> get props => [path];
 }
+
 class StorageError extends StorageState {
   final String message;
   StorageError(this.message);
@@ -36,7 +41,7 @@ class StorageCubit extends Cubit<StorageState> {
   Future<void> init() async {
     emit(StorageChecking());
     final storedPath = _storageService.getStoredPath();
-    
+
     if (storedPath != null && _storageService.isPathValid(storedPath)) {
       await _dbHelper.initPath(_storageService.getDatabasePath(storedPath));
       emit(StorageReady(storedPath));
@@ -49,11 +54,11 @@ class StorageCubit extends Cubit<StorageState> {
     try {
       emit(StorageLoading());
       final selectedPath = await _storageService.pickDirectory();
-      
+
       if (selectedPath != null) {
         await _storageService.setupDirectories(selectedPath);
         await _storageService.setStoredPath(selectedPath);
-        
+
         await _dbHelper.initPath(_storageService.getDatabasePath(selectedPath));
         emit(StorageReady(selectedPath));
       } else {
@@ -70,7 +75,7 @@ class StorageCubit extends Cubit<StorageState> {
       final defaultPath = await _storageService.getDefaultPath();
       await _storageService.setupDirectories(defaultPath);
       await _storageService.setStoredPath(defaultPath);
-      
+
       await _dbHelper.initPath(_storageService.getDatabasePath(defaultPath));
       emit(StorageReady(defaultPath));
     } catch (e) {

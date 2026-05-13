@@ -27,7 +27,8 @@ class KeyButton extends StatefulWidget {
   State<KeyButton> createState() => _KeyButtonState();
 }
 
-class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMixin {
+class _KeyButtonState extends State<KeyButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   bool _isHovered = false;
@@ -53,17 +54,17 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     // Coffee Theme Colors
     const darkBrown = Color(0xFF3E2723);
     const coffeeBrown = Color(0xFF5D4037);
     const cream = Color(0xFFF5F5DC);
     const accentGold = Color(0xFFD4AF37);
 
-    final defaultColor = widget.isSpecial 
+    final defaultColor = widget.isSpecial
         ? (isDark ? coffeeBrown.withValues(alpha: 0.8) : Colors.grey[300])
         : (isDark ? darkBrown : Colors.white);
-    
+
     final finalColor = widget.color ?? defaultColor;
     final finalTextColor = widget.textColor ?? (isDark ? cream : darkBrown);
 
@@ -80,12 +81,18 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
               duration: const Duration(milliseconds: 200),
               height: widget.height ?? 60,
               decoration: BoxDecoration(
-                color: _isHovered ? finalColor!.withValues(alpha: 0.9) : finalColor,
+                color: _isHovered
+                    ? finalColor!.withValues(alpha: 0.9)
+                    : finalColor,
                 borderRadius: BorderRadius.circular(12),
-                border: widget.isSpecial ? Border.all(color: accentGold.withValues(alpha: 0.3), width: 1.5) : null,
+                border: widget.isSpecial
+                    ? Border.all(
+                        color: accentGold.withValues(alpha: 0.3), width: 1.5)
+                    : null,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: _isHovered ? 0.3 : 0.1),
+                    color:
+                        Colors.black.withValues(alpha: _isHovered ? 0.3 : 0.1),
                     blurRadius: _isHovered ? 8 : 4,
                     offset: const Offset(0, 2),
                   ),
@@ -114,7 +121,8 @@ class _KeyButtonState extends State<KeyButton> with SingleTickerProviderStateMix
                             ),
                           )
                         : IconTheme(
-                            data: IconThemeData(color: finalTextColor, size: 24),
+                            data:
+                                IconThemeData(color: finalTextColor, size: 24),
                             child: widget.icon!,
                           ),
                   ),

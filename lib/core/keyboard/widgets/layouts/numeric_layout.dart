@@ -3,7 +3,7 @@ import 'package:cafe/core/keyboard/models/cafe_keyboard_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../key_button.dart';
- 
+
 class NumericLayout extends StatelessWidget {
   const NumericLayout({super.key});
 
@@ -19,7 +19,8 @@ class NumericLayout extends StatelessWidget {
         _buildRow(["7", "8", "9"], cubit, height: 70),
         Row(
           children: [
-            if (state.type == CafeKeyboardType.amount || state.type == CafeKeyboardType.numeric)
+            if (state.type == CafeKeyboardType.amount ||
+                state.type == CafeKeyboardType.numeric)
               KeyButton(
                 label: ".",
                 height: 70,
@@ -27,13 +28,11 @@ class NumericLayout extends StatelessWidget {
               )
             else
               const Spacer(),
-            
             KeyButton(
               label: "0",
               height: 70,
               onTap: () => cubit.onKeyPressed("0"),
             ),
-            
             KeyButton(
               icon: const Icon(Icons.backspace_outlined),
               isSpecial: true,
@@ -75,11 +74,13 @@ class NumericLayout extends StatelessWidget {
 
   Widget _buildRow(List<String> keys, KeyboardCubit cubit, {double? height}) {
     return Row(
-      children: keys.map((key) => KeyButton(
-        label: key,
-        height: height,
-        onTap: () => cubit.onKeyPressed(key),
-      )).toList(),
+      children: keys
+          .map((key) => KeyButton(
+                label: key,
+                height: height,
+                onTap: () => cubit.onKeyPressed(key),
+              ))
+          .toList(),
     );
   }
 }

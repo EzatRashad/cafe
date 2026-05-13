@@ -132,7 +132,6 @@ GoRouter createRouter(AuthCubit authCubit, StorageCubit storageCubit) {
               child: const ExpensesScreen(),
             ),
           ),
-
           GoRoute(
             path: AppRoutes.settings,
             builder: (context, state) => const SettingsScreen(),

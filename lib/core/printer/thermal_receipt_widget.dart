@@ -40,24 +40,43 @@ class ThermalReceiptWidget extends StatelessWidget {
             Text(
               'فاتورة رقم: ${invoice.id}',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: Colors.black, fontFamily: 'Cairo'),
+              style: const TextStyle(
+                  fontSize: 16, color: Colors.black, fontFamily: 'Cairo'),
             ),
             Text(
               'التاريخ: ${DateFormat('yyyy-MM-dd HH:mm').format(invoice.createdAt)}',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14, color: Colors.black, fontFamily: 'Cairo'),
+              style: const TextStyle(
+                  fontSize: 14, color: Colors.black, fontFamily: 'Cairo'),
             ),
             const SizedBox(height: 16),
             const Divider(color: Colors.black, thickness: 1.5),
-            
+
             // Table Header
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: const [
-                  Expanded(flex: 3, child: Text('الصنف', style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Cairo'))),
-                  Expanded(flex: 1, child: Text('الكمية', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Cairo'))),
-                  Expanded(flex: 2, child: Text('السعر', textAlign: TextAlign.left, style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Cairo'))),
+                  Expanded(
+                      flex: 3,
+                      child: Text('الصنف',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cairo'))),
+                  Expanded(
+                      flex: 1,
+                      child: Text('الكمية',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cairo'))),
+                  Expanded(
+                      flex: 2,
+                      child: Text('السعر',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Cairo'))),
                 ],
               ),
             ),
@@ -65,15 +84,26 @@ class ThermalReceiptWidget extends StatelessWidget {
 
             // Items
             ...invoice.items.map((item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Row(
-                children: [
-                  Expanded(flex: 3, child: Text(item.productName, style: const TextStyle(fontFamily: 'Cairo'))),
-                  Expanded(flex: 1, child: Text('${item.quantity}', textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'Cairo'))),
-                  Expanded(flex: 2, child: Text('${item.price.toStringAsFixed(2)}', textAlign: TextAlign.left, style: const TextStyle(fontFamily: 'Cairo'))),
-                ],
-              ),
-            )),
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          flex: 3,
+                          child: Text(item.productName,
+                              style: const TextStyle(fontFamily: 'Cairo'))),
+                      Expanded(
+                          flex: 1,
+                          child: Text('${item.quantity}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontFamily: 'Cairo'))),
+                      Expanded(
+                          flex: 2,
+                          child: Text(item.price.toStringAsFixed(2),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(fontFamily: 'Cairo'))),
+                    ],
+                  ),
+                )),
 
             const SizedBox(height: 16),
             const Divider(color: Colors.black, thickness: 1.5),
@@ -83,8 +113,11 @@ class ThermalReceiptWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('المجموع الفرعي:', style: TextStyle(fontSize: 16, fontFamily: 'Cairo')),
-                  Text('${invoice.subtotal.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                  const Text('المجموع الفرعي:',
+                      style: TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                  Text('${invoice.subtotal.toStringAsFixed(2)} ر.س',
+                      style:
+                          const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
                 ],
               ),
               const SizedBox(height: 4),
@@ -92,9 +125,15 @@ class ThermalReceiptWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('الخصم (${invoice.discountType == 'percentage' ? '${invoice.discountValue}%' : 'قيمة ثابتة'}):',
-                        style: const TextStyle(fontSize: 16, fontFamily: 'Cairo', color: Colors.black)),
-                    Text('-${invoice.discountAmount.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                    Text(
+                        'الخصم (${invoice.discountType == 'percentage' ? '${invoice.discountValue}%' : 'قيمة ثابتة'}):',
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Cairo',
+                            color: Colors.black)),
+                    Text('-${invoice.discountAmount.toStringAsFixed(2)} ر.س',
+                        style:
+                            const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -103,8 +142,12 @@ class ThermalReceiptWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('الضريبة (${invoice.taxPercent}%):', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
-                    Text('${invoice.taxAmount.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                    Text('الضريبة (${invoice.taxPercent}%):',
+                        style:
+                            const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
+                    Text('${invoice.taxAmount.toStringAsFixed(2)} ر.س',
+                        style:
+                            const TextStyle(fontSize: 16, fontFamily: 'Cairo')),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -114,8 +157,16 @@ class ThermalReceiptWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('الإجمالي النهائي:', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'Cairo')),
-                Text('${invoice.total.toStringAsFixed(2)} ر.س', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'Cairo')),
+                const Text('الإجمالي النهائي:',
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Cairo')),
+                Text('${invoice.total.toStringAsFixed(2)} ر.س',
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Cairo')),
               ],
             ),
             const SizedBox(height: 8),
@@ -129,13 +180,17 @@ class ThermalReceiptWidget extends StatelessWidget {
             const Text(
               'شكراً لزيارتكم!',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'Cairo'),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Cairo'),
             ),
             const SizedBox(height: 4),
             const Text(
               'صنع بكل حب في مصر',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12, color: Colors.black54, fontFamily: 'Cairo'),
+              style: TextStyle(
+                  fontSize: 12, color: Colors.black54, fontFamily: 'Cairo'),
             ),
           ],
         ),

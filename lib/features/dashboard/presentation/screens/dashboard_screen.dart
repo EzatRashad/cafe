@@ -122,7 +122,7 @@ class _DashboardHeader extends StatelessWidget {
                   final bytes = await PdfGenerator.generateReport(from: f, to: t);
                   await Printing.layoutPdf(onLayout: (_) => bytes);
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('error'.tr() + ': $e')));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${'error'.tr()}: $e')));
                 }
               },
             ),
@@ -163,7 +163,7 @@ class _StatsGrid extends StatelessWidget {
           value: state.netProfit.toStringAsFixed(2),
           icon: Icons.trending_up_rounded,
           color: state.netProfit >= 0 ? AppColors.success : AppColors.error,
-          subtitle: state.netProfit >= 0 ? '▲ ' + 'profit'.tr() : '▼ ' + 'loss'.tr()),
+          subtitle: state.netProfit >= 0 ? '▲ ${'profit'.tr()}' : '▼ ${'loss'.tr()}'),
       StatCard(title: 'totalInvoices'.tr(), value: '${state.totalInvoices}',
           icon: Icons.receipt_long_rounded, color: AppColors.primary),
     ];

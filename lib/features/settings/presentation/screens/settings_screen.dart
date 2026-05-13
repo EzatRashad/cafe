@@ -25,11 +25,14 @@ class SettingsScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is PrinterError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: AppColors.error),
+            SnackBar(
+                content: Text(state.message), backgroundColor: AppColors.error),
           );
         } else if (state is PrinterSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: AppColors.success),
+            SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppColors.success),
           );
         }
       },
@@ -43,7 +46,8 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('settings'.tr(), style: Theme.of(context).textTheme.headlineMedium),
+                    Text('settings'.tr(),
+                        style: Theme.of(context).textTheme.headlineMedium),
                     const SizedBox(height: 24),
 
                     // Appearance
@@ -53,11 +57,16 @@ class SettingsScreen extends StatelessWidget {
                         children: [
                           SwitchListTile(
                             value: settings.isDark,
-                            onChanged: (_) => context.read<SettingsCubit>().toggleTheme(),
+                            onChanged: (_) =>
+                                context.read<SettingsCubit>().toggleTheme(),
                             title: Text('darkMode'.tr()),
-                            subtitle: Text(settings.isDark ? 'darkMode'.tr() : 'lightMode'.tr()),
+                            subtitle: Text(settings.isDark
+                                ? 'darkMode'.tr()
+                                : 'lightMode'.tr()),
                             secondary: Icon(
-                              settings.isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                              settings.isDark
+                                  ? Icons.dark_mode_rounded
+                                  : Icons.light_mode_rounded,
                               color: AppColors.accent,
                             ),
                           ),
@@ -71,11 +80,23 @@ class SettingsScreen extends StatelessWidget {
                     AppCard(
                       child: Column(
                         children: [
-                          _LangTile(code: 'en', label: 'english'.tr(), flag: '🇬🇧', current: context.locale.languageCode),
+                          _LangTile(
+                              code: 'en',
+                              label: 'english'.tr(),
+                              flag: '🇬🇧',
+                              current: context.locale.languageCode),
                           const Divider(height: 1),
-                          _LangTile(code: 'ar', label: 'arabic'.tr(), flag: '🇸🇦', current: context.locale.languageCode),
+                          _LangTile(
+                              code: 'ar',
+                              label: 'arabic'.tr(),
+                              flag: '🇸🇦',
+                              current: context.locale.languageCode),
                           const Divider(height: 1),
-                          _LangTile(code: 'bn', label: 'bengali'.tr(), flag: '🇧🇩', current: context.locale.languageCode),
+                          _LangTile(
+                              code: 'bn',
+                              label: 'bengali'.tr(),
+                              flag: '🇧🇩',
+                              current: context.locale.languageCode),
                         ],
                       ),
                     ),
@@ -86,9 +107,11 @@ class SettingsScreen extends StatelessWidget {
                     _SectionTitle('security'.tr()),
                     AppCard(
                       child: ListTile(
-                        leading: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
+                        leading: const Icon(Icons.lock_outline_rounded,
+                            color: AppColors.primary),
                         title: Text('changePassword'.tr()),
-                        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded,
+                            size: 16),
                         onTap: () => _showChangePasswordDialog(context),
                       ),
                     ),
@@ -101,11 +124,15 @@ class SettingsScreen extends StatelessWidget {
                         final path = state is StorageReady ? state.path : '...';
                         return AppCard(
                           child: ListTile(
-                            leading: const Icon(Icons.folder_open_rounded, color: AppColors.primary),
+                            leading: const Icon(Icons.folder_open_rounded,
+                                color: AppColors.primary),
                             title: Text(path),
-                            subtitle: Text('changeStoragePath'.tr(), style: const TextStyle(fontSize: 11)),
+                            subtitle: Text('changeStoragePath'.tr(),
+                                style: const TextStyle(fontSize: 11)),
                             trailing: const Icon(Icons.edit_rounded, size: 16),
-                            onTap: () => context.read<StorageCubit>().changeStoragePath(),
+                            onTap: () => context
+                                .read<StorageCubit>()
+                                .changeStoragePath(),
                           ),
                         );
                       },
@@ -118,13 +145,15 @@ class SettingsScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           ListTile(
-                            leading: const Icon(Icons.backup_rounded, color: AppColors.success),
+                            leading: const Icon(Icons.backup_rounded,
+                                color: AppColors.success),
                             title: Text('backup'.tr()),
                             onTap: () => _handleBackup(context),
                           ),
                           const Divider(height: 1),
                           ListTile(
-                            leading: const Icon(Icons.restore_rounded, color: AppColors.accent),
+                            leading: const Icon(Icons.restore_rounded,
+                                color: AppColors.accent),
                             title: Text('restore'.tr()),
                             onTap: () => _handleRestore(context),
                           ),
@@ -132,14 +161,16 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Billing Settings
                     _SectionTitle('taxSettings'.tr()),
                     AppCard(
                       child: ListTile(
-                        leading: const Icon(Icons.receipt_long_rounded, color: AppColors.primary),
+                        leading: const Icon(Icons.receipt_long_rounded,
+                            color: AppColors.primary),
                         title: Text('taxSettings'.tr()),
-                        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded,
+                            size: 16),
                         onTap: () => context.push(AppRoutes.taxSettings),
                       ),
                     ),
@@ -149,24 +180,39 @@ class SettingsScreen extends StatelessWidget {
                     _SectionTitle('إعدادات الطابعة'),
                     BlocBuilder<PrinterCubit, PrinterState>(
                       builder: (context, state) {
-                        if (state is PrinterLoading) return const Center(child: CircularProgressIndicator());
-                        
-                        final printers = state is PrinterLoaded ? state.availablePrinters : <String>[];
-                        final selected = state is PrinterLoaded ? state.selectedPrinter : null;
+                        if (state is PrinterLoading)
+                          return const Center(
+                              child: CircularProgressIndicator());
+
+                        final printers = state is PrinterLoaded
+                            ? state.availablePrinters
+                            : <String>[];
+                        final selected = state is PrinterLoaded
+                            ? state.selectedPrinter
+                            : null;
 
                         return AppCard(
                           child: Column(
                             children: [
                               DropdownButtonFormField<String>(
-                                value: selected != null && printers.contains(selected) ? selected : null,
+                                initialValue: selected != null &&
+                                        printers.contains(selected)
+                                    ? selected
+                                    : null,
                                 isExpanded: true,
                                 decoration: const InputDecoration(
                                   labelText: 'اختر الطابعة (USB)',
                                   prefixIcon: Icon(Icons.print_rounded),
                                 ),
-                                items: printers.map((p) => DropdownMenuItem(value: p, child: Text(p))).toList(),
+                                items: printers
+                                    .map((p) => DropdownMenuItem(
+                                        value: p, child: Text(p)))
+                                    .toList(),
                                 onChanged: (val) {
-                                  if (val != null) context.read<PrinterCubit>().selectPrinter(val);
+                                  if (val != null)
+                                    context
+                                        .read<PrinterCubit>()
+                                        .selectPrinter(val);
                                 },
                               ),
                               const SizedBox(height: 12),
@@ -177,7 +223,9 @@ class SettingsScreen extends StatelessWidget {
                                       label: 'تحديث القائمة',
                                       icon: Icons.refresh_rounded,
                                       isOutlined: true,
-                                      onPressed: () => context.read<PrinterCubit>().loadPrinters(),
+                                      onPressed: () => context
+                                          .read<PrinterCubit>()
+                                          .loadPrinters(),
                                     ),
                                   ),
                                   const SizedBox(width: 12),
@@ -185,7 +233,11 @@ class SettingsScreen extends StatelessWidget {
                                     child: AppButton(
                                       label: 'طباعة تجربة',
                                       icon: Icons.print_rounded,
-                                      onPressed: selected == null ? null : () => context.read<PrinterCubit>().testPrint(),
+                                      onPressed: selected == null
+                                          ? null
+                                          : () => context
+                                              .read<PrinterCubit>()
+                                              .testPrint(),
                                     ),
                                   ),
                                 ],
@@ -228,13 +280,17 @@ class SettingsScreen extends StatelessWidget {
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('backupSuccess'.tr()), backgroundColor: AppColors.success),
+          SnackBar(
+              content: Text('backupSuccess'.tr()),
+              backgroundColor: AppColors.success),
         );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('backupError'.tr()), backgroundColor: AppColors.error),
+          SnackBar(
+              content: Text('backupError'.tr()),
+              backgroundColor: AppColors.error),
         );
       }
     }
@@ -253,7 +309,9 @@ class SettingsScreen extends StatelessWidget {
 
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('restoreSuccess'.tr()), backgroundColor: AppColors.success),
+            SnackBar(
+                content: Text('restoreSuccess'.tr()),
+                backgroundColor: AppColors.success),
           );
           // Reload essential data or app
           context.go(AppRoutes.dashboard);
@@ -262,7 +320,9 @@ class SettingsScreen extends StatelessWidget {
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('restoreError'.tr()), backgroundColor: AppColors.error),
+          SnackBar(
+              content: Text('restoreError'.tr()),
+              backgroundColor: AppColors.error),
         );
       }
     }
@@ -275,14 +335,17 @@ class SettingsScreen extends StatelessWidget {
         title: Text('logout'.tr()),
         content: Text('logoutConfirm'.tr()),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('cancel'.tr())),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('cancel'.tr())),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             onPressed: () {
               Navigator.pop(context);
               context.read<AuthCubit>().logout();
             },
-            child: Text('logout'.tr(), style: const TextStyle(color: Colors.white)),
+            child: Text('logout'.tr(),
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -301,14 +364,22 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppTextField(label: 'newPassword'.tr(), controller: ctrl, obscureText: true),
+              AppTextField(
+                  label: 'newPassword'.tr(),
+                  controller: ctrl,
+                  obscureText: true),
               const SizedBox(height: 12),
-              AppTextField(label: 'confirmPassword'.tr(), controller: confirmCtrl, obscureText: true),
+              AppTextField(
+                  label: 'confirmPassword'.tr(),
+                  controller: confirmCtrl,
+                  obscureText: true),
             ],
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('cancel'.tr())),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('cancel'.tr())),
           AppButton(
             label: 'save'.tr(),
             width: 90,
@@ -318,7 +389,7 @@ class SettingsScreen extends StatelessWidget {
                 if (context.mounted) {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('passwordChanged'.tr())));
+                      SnackBar(content: Text('passwordChanged'.tr())));
                 }
               }
             },
@@ -348,7 +419,11 @@ class _SectionTitle extends StatelessWidget {
 
 class _LangTile extends StatelessWidget {
   final String code, label, flag, current;
-  const _LangTile({required this.code, required this.label, required this.flag, required this.current});
+  const _LangTile(
+      {required this.code,
+      required this.label,
+      required this.flag,
+      required this.current});
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +433,8 @@ class _LangTile extends StatelessWidget {
       title: Text(label),
       trailing: selected
           ? const Icon(Icons.check_circle_rounded, color: AppColors.accent)
-          : const Icon(Icons.radio_button_unchecked_rounded, color: AppColors.textSecondary),
+          : const Icon(Icons.radio_button_unchecked_rounded,
+              color: AppColors.textSecondary),
       onTap: () {
         context.read<SettingsCubit>().setLanguage(code);
         context.setLocale(Locale(code));

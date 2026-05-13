@@ -137,8 +137,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         const SizedBox(height: 16),
                         Text(state.message,
                             textAlign: TextAlign.center,
-                            style:
-                                const TextStyle(color: AppColors.textSecondary)),
+                            style: const TextStyle(
+                                color: AppColors.textSecondary)),
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () =>

@@ -38,5 +38,12 @@ class BillingState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [tabs, activeTabIndex, isSaving, lastSavedMessage, error, lastSavedInvoice];
+  List<Object?> get props => [
+        tabs,
+        activeTabIndex,
+        isSaving,
+        lastSavedMessage,
+        error,
+        lastSavedInvoice
+      ];
 }

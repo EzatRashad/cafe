@@ -18,10 +18,10 @@ class DatabaseHelper {
   /// Set the database path before initialization
   Future<void> initPath(String path) async {
     if (_customPath == path && _database != null) return;
-    
+
     // Close existing connection if any
     await close();
-    
+
     _customPath = path;
     _initDbFuture = null;
   }
@@ -38,7 +38,7 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    
+
     // Ensure we don't have multiple simultaneous initializations
     _initDbFuture ??= _initDatabase();
     return await _initDbFuture!;
@@ -74,7 +74,8 @@ class DatabaseHelper {
           version: 3,
           onCreate: _onCreate,
           onUpgrade: _onUpgrade,
-          onConfigure: (db) async => await db.execute('PRAGMA foreign_keys = ON'),
+          onConfigure: (db) async =>
+              await db.execute('PRAGMA foreign_keys = ON'),
         ),
       );
     } else {
@@ -161,15 +162,22 @@ class DatabaseHelper {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute('ALTER TABLE invoices ADD COLUMN tax_enabled INTEGER DEFAULT 0');
-      await db.execute('ALTER TABLE invoices ADD COLUMN tax_percent REAL DEFAULT 0');
-      await db.execute('ALTER TABLE invoices ADD COLUMN tax_amount REAL DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE invoices ADD COLUMN tax_enabled INTEGER DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE invoices ADD COLUMN tax_percent REAL DEFAULT 0');
+      await db
+          .execute('ALTER TABLE invoices ADD COLUMN tax_amount REAL DEFAULT 0');
     }
     if (oldVersion < 3) {
-      await db.execute('ALTER TABLE invoices ADD COLUMN discount_enabled INTEGER DEFAULT 0');
-      await db.execute('ALTER TABLE invoices ADD COLUMN discount_type TEXT DEFAULT "percentage"');
-      await db.execute('ALTER TABLE invoices ADD COLUMN discount_value REAL DEFAULT 0');
-      await db.execute('ALTER TABLE invoices ADD COLUMN discount_amount REAL DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE invoices ADD COLUMN discount_enabled INTEGER DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE invoices ADD COLUMN discount_type TEXT DEFAULT "percentage"');
+      await db.execute(
+          'ALTER TABLE invoices ADD COLUMN discount_value REAL DEFAULT 0');
+      await db.execute(
+          'ALTER TABLE invoices ADD COLUMN discount_amount REAL DEFAULT 0');
     }
   }
 
@@ -178,7 +186,8 @@ class DatabaseHelper {
     final db = await database;
     final existing = await db.query('auth', limit: 1);
     if (existing.isEmpty) {
-      await db.insert('auth', {'password_hash': passwordHash, 'remember_me': 0});
+      await db
+          .insert('auth', {'password_hash': passwordHash, 'remember_me': 0});
     } else {
       await db.update('auth', {'password_hash': passwordHash});
     }
@@ -195,7 +204,8 @@ class DatabaseHelper {
       (await database).insert('categories', data);
 
   Future<int> updateCategory(String id, Map<String, dynamic> data) async =>
-      (await database).update('categories', data, where: 'id = ?', whereArgs: [id]);
+      (await database)
+          .update('categories', data, where: 'id = ?', whereArgs: [id]);
 
   Future<int> deleteCategory(String id) async =>
       (await database).delete('categories', where: 'id = ?', whereArgs: [id]);
@@ -208,7 +218,8 @@ class DatabaseHelper {
       (await database).insert('products', data);
 
   Future<int> updateProduct(String id, Map<String, dynamic> data) async =>
-      (await database).update('products', data, where: 'id = ?', whereArgs: [id]);
+      (await database)
+          .update('products', data, where: 'id = ?', whereArgs: [id]);
 
   Future<int> deleteProduct(String id) async =>
       (await database).delete('products', where: 'id = ?', whereArgs: [id]);
@@ -216,12 +227,13 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getProducts({String? categoryId}) async {
     final db = await database;
     if (categoryId != null) {
-      return db.query('products', where: 'category_id = ?', whereArgs: [categoryId], orderBy: 'name ASC');
+      return db.query('products',
+          where: 'category_id = ?',
+          whereArgs: [categoryId],
+          orderBy: 'name ASC');
     }
     return db.query('products', orderBy: 'name ASC');
   }
-
-
 
   Future<void> incrementSoldCount(String productId, int qty) async {
     final db = await database;
@@ -232,7 +244,8 @@ class DatabaseHelper {
   }
 
   // ── Invoices ─────────────────────────────────────────────────────────────────
-  Future<String> insertInvoice(Map<String, dynamic> invoiceData, List<Map<String, dynamic>> items) async {
+  Future<String> insertInvoice(Map<String, dynamic> invoiceData,
+      List<Map<String, dynamic>> items) async {
     final db = await database;
     await db.transaction((txn) async {
       await txn.insert('invoices', invoiceData);
@@ -250,11 +263,13 @@ class DatabaseHelper {
     return invoiceData['id'] as String;
   }
 
-  Future<int> updateInvoice(String id, Map<String, dynamic> data, List<Map<String, dynamic>> items) async {
+  Future<int> updateInvoice(String id, Map<String, dynamic> data,
+      List<Map<String, dynamic>> items) async {
     final db = await database;
     await db.transaction((txn) async {
       await txn.update('invoices', data, where: 'id = ?', whereArgs: [id]);
-      await txn.delete('invoice_items', where: 'invoice_id = ?', whereArgs: [id]);
+      await txn
+          .delete('invoice_items', where: 'invoice_id = ?', whereArgs: [id]);
       for (final item in items) {
         await txn.insert('invoice_items', item);
       }
@@ -266,7 +281,8 @@ class DatabaseHelper {
     final db = await database;
     int result = 0;
     await db.transaction((txn) async {
-      final items = await txn.query('invoice_items', where: 'invoice_id = ?', whereArgs: [id]);
+      final items = await txn
+          .query('invoice_items', where: 'invoice_id = ?', whereArgs: [id]);
       for (final item in items) {
         await txn.rawUpdate(
           'UPDATE products SET sold_count = MAX(0, sold_count - ?) WHERE id = ?',
@@ -278,7 +294,8 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<List<Map<String, dynamic>>> getInvoices({String? from, String? to}) async {
+  Future<List<Map<String, dynamic>>> getInvoices(
+      {String? from, String? to}) async {
     final db = await database;
     if (from != null && to != null) {
       return db.query('invoices',
@@ -290,7 +307,8 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getInvoiceItems(String invoiceId) async =>
-      (await database).query('invoice_items', where: 'invoice_id = ?', whereArgs: [invoiceId]);
+      (await database).query('invoice_items',
+          where: 'invoice_id = ?', whereArgs: [invoiceId]);
 
   Future<Map<String, dynamic>?> getInvoiceById(String id) async {
     final db = await database;
@@ -303,12 +321,14 @@ class DatabaseHelper {
       (await database).insert('expenses', data);
 
   Future<int> updateExpense(String id, Map<String, dynamic> data) async =>
-      (await database).update('expenses', data, where: 'id = ?', whereArgs: [id]);
+      (await database)
+          .update('expenses', data, where: 'id = ?', whereArgs: [id]);
 
   Future<int> deleteExpense(String id) async =>
       (await database).delete('expenses', where: 'id = ?', whereArgs: [id]);
 
-  Future<List<Map<String, dynamic>>> getExpenses({String? from, String? to}) async {
+  Future<List<Map<String, dynamic>>> getExpenses(
+      {String? from, String? to}) async {
     final db = await database;
     if (from != null && to != null) {
       return db.query('expenses',
@@ -319,9 +339,9 @@ class DatabaseHelper {
     return db.query('expenses', orderBy: 'created_at DESC');
   }
 
-
   // ── Dashboard ────────────────────────────────────────────────────────────────
-  Future<Map<String, dynamic>> getDashboardStats({String? from, String? to}) async {
+  Future<Map<String, dynamic>> getDashboardStats(
+      {String? from, String? to}) async {
     final db = await database;
 
     // Simpler approach
@@ -357,7 +377,8 @@ class DatabaseHelper {
     };
   }
 
-  Future<List<Map<String, dynamic>>> getTopProducts({String? from, String? to, int limit = 7}) async {
+  Future<List<Map<String, dynamic>>> getTopProducts(
+      {String? from, String? to, int limit = 7}) async {
     final db = await database;
     String dateFilter = '';
     List<dynamic> args = [];
@@ -376,7 +397,8 @@ class DatabaseHelper {
     ''', args);
   }
 
-  Future<List<Map<String, dynamic>>> getSalesByDay({String? from, String? to}) async {
+  Future<List<Map<String, dynamic>>> getSalesByDay(
+      {String? from, String? to}) async {
     final db = await database;
     String dateFilter = '';
     List<dynamic> args = [];

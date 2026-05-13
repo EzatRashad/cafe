@@ -4,13 +4,13 @@ class AppColors {
   AppColors._();
 
   // Café primary palette
-  static const Color primary = Color(0xFF5D4037);       // Deep Brown
-  static const Color primaryLight = Color(0xFF8D6E63);  // Light Brown
-  static const Color primaryDark = Color(0xFF3E2723);   // Very Dark Brown
-  static const Color accent = Color(0xFFFFB300);        // Amber
-  static const Color accentDark = Color(0xFFFF8F00);    // Dark Amber
-  static const Color surface = Color(0xFFFFF8E1);       // Cream
-  static const Color background = Color(0xFFF5F0EB);    // Warm Off-White
+  static const Color primary = Color(0xFF5D4037); // Deep Brown
+  static const Color primaryLight = Color(0xFF8D6E63); // Light Brown
+  static const Color primaryDark = Color(0xFF3E2723); // Very Dark Brown
+  static const Color accent = Color(0xFFFFB300); // Amber
+  static const Color accentDark = Color(0xFFFF8F00); // Dark Amber
+  static const Color surface = Color(0xFFFFF8E1); // Cream
+  static const Color background = Color(0xFFF5F0EB); // Warm Off-White
   static const Color cardLight = Color(0xFFFFFFFF);
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);

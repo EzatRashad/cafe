@@ -396,7 +396,7 @@ class _InvoicePanel extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text('${item.subtotal.toStringAsFixed(2)}',
+                                    Text(item.subtotal.toStringAsFixed(2),
                                         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                                   ],
                                 ),
@@ -506,7 +506,7 @@ class _InvoicePanel extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('subtotal'.tr(), style: const TextStyle(fontSize: 14)),
-                          Text('${tab.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 14)),
+                          Text(tab.subtotal.toStringAsFixed(2), style: const TextStyle(fontSize: 14)),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -529,7 +529,7 @@ class _InvoicePanel extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('${'tax'.tr()} (${settings.taxPercent}%)', style: const TextStyle(fontSize: 14)),
-                            Text('${taxAmount.toStringAsFixed(2)}', style: const TextStyle(fontSize: 14)),
+                            Text(taxAmount.toStringAsFixed(2), style: const TextStyle(fontSize: 14)),
                           ],
                         ),
                         const SizedBox(height: 4),
@@ -539,7 +539,7 @@ class _InvoicePanel extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('total'.tr(), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                          Text('${finalTotal.toStringAsFixed(2)}',
+                          Text(finalTotal.toStringAsFixed(2),
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: AppColors.accent)),
                         ],
                       ),

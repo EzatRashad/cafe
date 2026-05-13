@@ -18,7 +18,9 @@ class KeyboardCubit extends Cubit<KeyboardState> {
   }
 
   void toggleLanguage() {
-    final nextLang = state.language == KeyboardLanguage.ar ? KeyboardLanguage.en : KeyboardLanguage.ar;
+    final nextLang = state.language == KeyboardLanguage.ar
+        ? KeyboardLanguage.en
+        : KeyboardLanguage.ar;
     emit(state.copyWith(language: nextLang));
   }
 
@@ -36,7 +38,7 @@ class KeyboardCubit extends Cubit<KeyboardState> {
 
     final text = controller.text;
     final selection = controller.selection;
-    
+
     // Determine the character to insert based on shift/capslock if it's a letter
     String charToInsert = char;
     if (state.language == KeyboardLanguage.en) {
@@ -52,10 +54,11 @@ class KeyboardCubit extends Cubit<KeyboardState> {
       selection.end,
       charToInsert,
     );
-    
+
     controller.value = TextEditingValue(
       text: newText,
-      selection: TextSelection.collapsed(offset: selection.start + charToInsert.length),
+      selection: TextSelection.collapsed(
+          offset: selection.start + charToInsert.length),
     );
 
     // If shift was enabled (one-time), disable it after one key press
@@ -80,7 +83,8 @@ class KeyboardCubit extends Cubit<KeyboardState> {
       );
     } else if (selection.start > 0) {
       // Delete previous character
-      final newText = text.replaceRange(selection.start - 1, selection.start, '');
+      final newText =
+          text.replaceRange(selection.start - 1, selection.start, '');
       controller.value = TextEditingValue(
         text: newText,
         selection: TextSelection.collapsed(offset: selection.start - 1),

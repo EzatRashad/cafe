@@ -44,10 +44,12 @@ class CategoriesScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         Text(state.message,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: AppColors.textSecondary)),
+                            style: const TextStyle(
+                                color: AppColors.textSecondary)),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () => context.read<CategoryCubit>().loadCategories(),
+                          onPressed: () =>
+                              context.read<CategoryCubit>().loadCategories(),
                           child: Text('retry'.tr()),
                         ),
                       ],
@@ -230,8 +232,6 @@ class _CategoryTile extends StatelessWidget {
       ),
     );
   }
-
-
 }
 
 class _CategoryDialog extends StatefulWidget {
@@ -256,7 +256,6 @@ class _CategoryDialogState extends State<_CategoryDialog> {
       _nameEnCtrl.text = names['en'] ?? '';
       _nameArCtrl.text = names['ar'] ?? '';
       _nameBnCtrl.text = names['bn'] ?? '';
-
     }
   }
 
@@ -279,7 +278,6 @@ class _CategoryDialogState extends State<_CategoryDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-
               AppTextField(
                 label: 'englishName'.tr(),
                 controller: _nameEnCtrl,
@@ -311,8 +309,6 @@ class _CategoryDialogState extends State<_CategoryDialog> {
       ],
     );
   }
-
-
 
   Future<void> _save() async {
     final en = _nameEnCtrl.text.trim();

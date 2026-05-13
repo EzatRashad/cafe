@@ -52,19 +52,27 @@ class PdfGenerator {
               pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
-                  pw.Text('CAFÉ EGYPT', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, color: darkBrown)),
-                  pw.Text('Business Report', style: pw.TextStyle(fontSize: 11, color: brown)),
+                  pw.Text('CAFÉ EGYPT',
+                      style: pw.TextStyle(
+                          fontSize: 20,
+                          fontWeight: pw.FontWeight.bold,
+                          color: darkBrown)),
+                  pw.Text('Business Report',
+                      style: pw.TextStyle(fontSize: 11, color: brown)),
                 ],
               ),
               pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.end,
                 children: [
-                  pw.Text('Period:', style: pw.TextStyle(fontSize: 9, color: brown)),
+                  pw.Text('Period:',
+                      style: pw.TextStyle(fontSize: 9, color: brown)),
                   pw.Text(
                     '${DateFormatter.formatDisplayDate(from)} → ${DateFormatter.formatDisplayDate(to)}',
-                    style: pw.TextStyle(fontSize: 10, fontWeight: pw.FontWeight.bold),
+                    style: pw.TextStyle(
+                        fontSize: 10, fontWeight: pw.FontWeight.bold),
                   ),
-                  pw.Text('Generated: ${DateFormatter.formatDisplayDate(DateTime.now())}',
+                  pw.Text(
+                      'Generated: ${DateFormatter.formatDisplayDate(DateTime.now())}',
                       style: pw.TextStyle(fontSize: 8, color: brown)),
                 ],
               ),
@@ -79,8 +87,10 @@ class PdfGenerator {
           child: pw.Row(
             mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
-              pw.Text('Café Egypt — Confidential', style: pw.TextStyle(fontSize: 8, color: brown)),
-              pw.Text('Page ${ctx.pageNumber} of ${ctx.pagesCount}', style: pw.TextStyle(fontSize: 8, color: brown)),
+              pw.Text('Café Egypt — Confidential',
+                  style: pw.TextStyle(fontSize: 8, color: brown)),
+              pw.Text('Page ${ctx.pageNumber} of ${ctx.pagesCount}',
+                  style: pw.TextStyle(fontSize: 8, color: brown)),
             ],
           ),
         ),
@@ -97,13 +107,18 @@ class PdfGenerator {
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text('Financial Summary', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold, color: darkBrown)),
+                pw.Text('Financial Summary',
+                    style: pw.TextStyle(
+                        fontSize: 14,
+                        fontWeight: pw.FontWeight.bold,
+                        color: darkBrown)),
                 pw.SizedBox(height: 12),
                 pw.Row(
                   children: [
                     _summaryBox('Cash Income', stats['cashIncome'], green),
                     pw.SizedBox(width: 8),
-                    _summaryBox('Card Income', stats['cardIncome'], PdfColor.fromHex('#1565C0')),
+                    _summaryBox('Card Income', stats['cardIncome'],
+                        PdfColor.fromHex('#1565C0')),
                     pw.SizedBox(width: 8),
                     _summaryBox('Total Income', stats['totalIncome'], amber),
                     pw.SizedBox(width: 8),
@@ -121,31 +136,45 @@ class PdfGenerator {
 
           // Top products
           if (topProducts.isNotEmpty) ...[
-            pw.Text('Top Selling Products', style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: darkBrown)),
+            pw.Text('Top Selling Products',
+                style: pw.TextStyle(
+                    fontSize: 13,
+                    fontWeight: pw.FontWeight.bold,
+                    color: darkBrown)),
             pw.SizedBox(height: 8),
             pw.Table(
-              border: pw.TableBorder.all(color: PdfColor.fromHex('#EFEBE9'), width: 0.5),
+              border: pw.TableBorder.all(
+                  color: PdfColor.fromHex('#EFEBE9'), width: 0.5),
               children: [
                 pw.TableRow(
                   decoration: pw.BoxDecoration(color: amber),
-                  children: ['#', 'Product', 'Qty Sold', 'Revenue'].map((h) => pw.Padding(
-                    padding: const pw.EdgeInsets.all(6),
-                    child: pw.Text(h, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10)),
-                  )).toList(),
+                  children: ['#', 'Product', 'Qty Sold', 'Revenue']
+                      .map((h) => pw.Padding(
+                            padding: const pw.EdgeInsets.all(6),
+                            child: pw.Text(h,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 10)),
+                          ))
+                      .toList(),
                 ),
                 ...topProducts.asMap().entries.map((e) {
                   final p = e.value;
                   return pw.TableRow(
-                    decoration: e.key.isEven ? pw.BoxDecoration(color: cream) : null,
+                    decoration:
+                        e.key.isEven ? pw.BoxDecoration(color: cream) : null,
                     children: [
                       '${e.key + 1}',
                       p['product_name']?.toString() ?? '',
                       '${p['total_qty']}',
                       (p['total_revenue'] as num).toStringAsFixed(2),
-                    ].map((v) => pw.Padding(
-                      padding: const pw.EdgeInsets.all(6),
-                      child: pw.Text(v, style: const pw.TextStyle(fontSize: 10)),
-                    )).toList(),
+                    ]
+                        .map((v) => pw.Padding(
+                              padding: const pw.EdgeInsets.all(6),
+                              child: pw.Text(v,
+                                  style: const pw.TextStyle(fontSize: 10)),
+                            ))
+                        .toList(),
                   );
                 }),
               ],
@@ -154,40 +183,61 @@ class PdfGenerator {
           ],
 
           // Invoice list
-          pw.Text('Invoice Summary (${invoices.length} invoices)', style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: darkBrown)),
+          pw.Text('Invoice Summary (${invoices.length} invoices)',
+              style: pw.TextStyle(
+                  fontSize: 13,
+                  fontWeight: pw.FontWeight.bold,
+                  color: darkBrown)),
           pw.SizedBox(height: 8),
-          pw.Text('Total invoices: ${invoices.length}   |   Total income: ${(stats['totalIncome'] as num).toStringAsFixed(2)}',
+          pw.Text(
+              'Total invoices: ${invoices.length}   |   Total income: ${(stats['totalIncome'] as num).toStringAsFixed(2)}',
               style: pw.TextStyle(fontSize: 10, color: brown)),
 
           pw.SizedBox(height: 20),
 
           // Expenses
-          pw.Text('Expense Summary (${expenses.length} entries)', style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: darkBrown)),
+          pw.Text('Expense Summary (${expenses.length} entries)',
+              style: pw.TextStyle(
+                  fontSize: 13,
+                  fontWeight: pw.FontWeight.bold,
+                  color: darkBrown)),
           pw.SizedBox(height: 8),
           if (expenses.isNotEmpty)
             pw.Table(
-              border: pw.TableBorder.all(color: PdfColor.fromHex('#EFEBE9'), width: 0.5),
+              border: pw.TableBorder.all(
+                  color: PdfColor.fromHex('#EFEBE9'), width: 0.5),
               children: [
                 pw.TableRow(
-                  decoration: pw.BoxDecoration(color: PdfColor.fromHex('#FFCCBC')),
-                  children: ['Date', 'Description', 'Type', 'Amount'].map((h) => pw.Padding(
-                    padding: const pw.EdgeInsets.all(6),
-                    child: pw.Text(h, style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10)),
-                  )).toList(),
+                  decoration:
+                      pw.BoxDecoration(color: PdfColor.fromHex('#FFCCBC')),
+                  children: ['Date', 'Description', 'Type', 'Amount']
+                      .map((h) => pw.Padding(
+                            padding: const pw.EdgeInsets.all(6),
+                            child: pw.Text(h,
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold,
+                                    fontSize: 10)),
+                          ))
+                      .toList(),
                 ),
                 ...expenses.asMap().entries.map((e) {
                   final exp = e.value;
                   return pw.TableRow(
-                    decoration: e.key.isEven ? pw.BoxDecoration(color: cream) : null,
+                    decoration:
+                        e.key.isEven ? pw.BoxDecoration(color: cream) : null,
                     children: [
-                      DateFormatter.formatDisplayDate(DateTime.parse(exp['created_at'] as String)),
+                      DateFormatter.formatDisplayDate(
+                          DateTime.parse(exp['created_at'] as String)),
                       exp['description']?.toString() ?? '-',
                       exp['payment_type']?.toString().toUpperCase() ?? '',
                       (exp['amount'] as num).toStringAsFixed(2),
-                    ].map((v) => pw.Padding(
-                      padding: const pw.EdgeInsets.all(6),
-                      child: pw.Text(v, style: const pw.TextStyle(fontSize: 10)),
-                    )).toList(),
+                    ]
+                        .map((v) => pw.Padding(
+                              padding: const pw.EdgeInsets.all(6),
+                              child: pw.Text(v,
+                                  style: const pw.TextStyle(fontSize: 10)),
+                            ))
+                        .toList(),
                   );
                 }),
               ],
@@ -215,7 +265,8 @@ class PdfGenerator {
             pw.SizedBox(height: 4),
             pw.Text(
               (value as num).toStringAsFixed(2),
-              style: pw.TextStyle(fontSize: 11, fontWeight: pw.FontWeight.bold, color: color),
+              style: pw.TextStyle(
+                  fontSize: 11, fontWeight: pw.FontWeight.bold, color: color),
             ),
           ],
         ),
